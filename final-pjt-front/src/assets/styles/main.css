@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'NanumSquareNeo-normal';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NanumSquareNeo-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+   font-family: "NanumSquare-Regular";
+   font-weight: 700;
+   src: url("src/main/resources/static/font/NanumSquareNeo/woff/NanumSquare-Regular.woff") format("application/font-woff");
+  }
+
+@font-face {
+   font-family: "NanumSquare-Light";
+   font-weight: 700;
+   src: url("src/main/resources/static/font/NanumSquareNeo/woff/NanumSquare-Light.woff") format("application/font-woff");
+}
+
+@font-face {
+   font-family: "NanumSquare-Bold";
+   font-weight: 700;
+   src: url("src/main/resources/static/font/NanumSquareNeo/woff/NanumSquare-Bold.woff") format("application/font-woff");
+}
+
+@font-face {
+   font-family: "NanumSquare-ExtraBold";
+   font-weight: 700;
+   src: url("src/main/resources/static/font/NanumSquareNeo/woff/NanumSquare-ExtraBold.woff") format("application/font-woff");
+}
+
+* {
+  font-family: 'NanumSquareNeo-normal', sans-serif;
+}
