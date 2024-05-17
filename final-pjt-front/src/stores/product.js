@@ -30,10 +30,10 @@ export const useProductStore = defineStore(
     const getSavings = function () {
       axios({
         method: "get",
-        url: `${API_URL}/`,
-        headers: {
-          Authorization: `Token ${token.value}`,
-        },
+        url: `${API_URL}/api/bank/savings/`,
+        // headers: {
+        //   Authorization: `Token ${token.value}`,
+        // },
       })
         .then((response) => {
           savings.value = response.data;
