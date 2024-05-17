@@ -6,12 +6,11 @@ class Deposit(models.Model):
     fin_prdt_cd = models.TextField(unique=True)  # 금융상품 코드
     fin_prdt_nm = models.TextField()  # 금융 상품명
     join_way = models.TextField()  # 가입 방법
-    mtrt_int = models.FloatField()  # 만기 후 이자율
+    mtrt_int = models.TextField()  # 만기 후 이자율
     spcl_cnd = models.TextField()  # 우대 조건
     join_deny = models.IntegerField()  # 가입제한 (1: 없음, 2:서민전용, 3:일부제한)
     join_member = models.TextField()  # 가입 대상
     etc_note = models.TextField()  # 기타 유의사항
-    max_limit = models.IntegerField()  # 최고한도
 
 # 예금 옵션
 class DepositOptions(models.Model):
@@ -29,12 +28,11 @@ class Saving(models.Model):
     fin_prdt_cd = models.TextField(unique=True)  # 금융상품 코드
     fin_prdt_nm = models.TextField()  # 금융 상품명
     join_way = models.TextField()  # 가입 방법
-    mtrt_int = models.FloatField()  # 만기 후 이자율
+    mtrt_int = models.TextField()  # 만기 후 이자율
     spcl_cnd = models.TextField()  # 우대 조건
     join_deny = models.IntegerField()  # 가입제한 (1: 없음, 2:서민전용, 3:일부제한)
     join_member = models.TextField()  # 가입 대상
     etc_note = models.TextField()  # 기타 유의사항
-    max_limit = models.IntegerField()  # 최고한도
 
 # 적금 옵션
 class SavingOptions(models.Model):
