@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Product Page</h1>
     <RouterLink :to="{ name: 'DepositList' }"> [예금] </RouterLink>
     <RouterLink :to="{ name: 'SavingsList' }"> [적금] </RouterLink>
@@ -20,4 +20,8 @@ const store = useProductStore();
 onMounted(() => {});
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  margin-left: 30px;
+}
+</style>

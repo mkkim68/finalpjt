@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="search">
+  <div class="container">
+    <div class="filter-section">
       <h4>검색하기</h4>
       <p>검색 조건을 입력하세요.</p>
       <hr />
@@ -27,7 +27,7 @@
         <input type="submit" value="확인" />
       </form>
     </div>
-    <div class="result">
+    <div class="table-section">
       <h3>정기 예금</h3>
       <ul>
         <li v-for="deposit in deposits" :key="deposit.id">
@@ -39,13 +39,39 @@
 </template>
 
 <script setup>
-import { useProductStore } from "@/stores/product";
 import { onMounted, computed } from "vue";
-const store = useProductStore();
+import { useProductStore } from "@/stores/product";
 
+const store = useProductStore();
 onMounted(() => {
   store.getDeposits();
 });
 
-const deposits = computed(() => store.deposits);
+const deposits = computed(() => store.products);
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  gap: 20px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.filter-section,
+.table-section {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+}
+
+.filter-section {
+  flex: 1;
+  max-width: 30%;
+}
+
+.table-section {
+  flex: 2;
+}
+</style>

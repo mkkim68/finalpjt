@@ -13,6 +13,7 @@ export const useAuthStore = defineStore(
     const signUp = function (payload) {
       const {
         username,
+        email,
         password1,
         password2,
         age,
@@ -21,18 +22,23 @@ export const useAuthStore = defineStore(
         favorite_bank,
         invest_type,
       } = payload;
-
       axios({
         method: "post",
         url: `${API_URL}/accounts/signup/`,
         data: {
           username,
+          email,
           password1,
           password2,
+          age,
+          balance,
+          income,
+          favorite_bank,
+          invest_type,
         },
       })
         .then((res) => {
-          console.log("회원가입이 완료되었습니다.");
+          // console.log("회원가입이 완료되었습니다.");
           // 회원가입 성공 후 자동으로 로그인까지 진행하기
           const password = password1;
           logIn({ username, password });
