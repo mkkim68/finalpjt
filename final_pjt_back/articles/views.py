@@ -13,7 +13,7 @@ from .serializers import ArticleListSerializer, ArticleSerializer
 from .models import Article
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def article_list(request):
     if request.method == 'GET':
         articles = get_list_or_404(Article)
@@ -27,13 +27,31 @@ def article_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
 
     if request.method == 'GET':
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
+    
+    if request.method == 'POST':
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(article=article)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    if request.method == 'DELETE':
+        my_dict = {'delete' : f'게시글 {article.title}을 삭제했습니다.'}
+        article.delete()
+        return Response(my_dict)
+
+    if request.method == 'PUT':
+        # 채우기
+        return Response(serializer.data, status=status.HTTP_201_CREATED) 
+
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -47,3 +65,5 @@ def article_like(request, article_pk):
             article.like_users.add(request.user)
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
+    
+
