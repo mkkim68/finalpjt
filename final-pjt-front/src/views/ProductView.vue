@@ -1,32 +1,23 @@
 <template>
   <div>
     <h1>Product Page</h1>
-    <RouterLink :to="{ name: 'DepositList' }">
-      [예금]
-    </RouterLink>
-    <RouterLink :to="{ name: 'SavingsList' }">
-      [적금]
-    </RouterLink>
+    <RouterLink :to="{ name: 'DepositList' }"> [예금] </RouterLink>
+    <RouterLink :to="{ name: 'SavingsList' }"> [적금] </RouterLink>
     <DepositList />
     <SavingsList />
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useCounterStore } from '@/stores/counter'
-import { RouterLink } from 'vue-router'
-import DepositList from '@/components/DepositList.vue'
-import SavingsList from '@/components/SavingsList.vue'
+import { onMounted } from "vue";
+import { useProductStore } from "@/stores/product";
+import { RouterLink } from "vue-router";
+import DepositList from "@/components/DepositList.vue";
+import SavingsList from "@/components/SavingsList.vue";
 
-const store = useCounterStore()
+const store = useProductStore();
 
-onMounted(() => {
-  
-})
-
+onMounted(() => {});
 </script>
 
-<style>
-
-</style>
+<style></style>

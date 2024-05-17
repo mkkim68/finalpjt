@@ -3,6 +3,7 @@ from django.db import models
 # 예금
 class Deposit(models.Model):
     kor_co_nm = models.TextField()  # 금융회사 명
+    fin_co_no = models.TextField()  # 금융회사 코드
     fin_prdt_cd = models.TextField(unique=True)  # 금융상품 코드
     fin_prdt_nm = models.TextField()  # 금융 상품명
     join_way = models.TextField()  # 가입 방법
@@ -25,6 +26,7 @@ class DepositOptions(models.Model):
 # 적금
 class Saving(models.Model):
     kor_co_nm = models.TextField()  # 금융회사 명
+    fin_co_no = models.TextField()  # 금융회사 코드
     fin_prdt_cd = models.TextField(unique=True)  # 금융상품 코드
     fin_prdt_nm = models.TextField()  # 금융 상품명
     join_way = models.TextField()  # 가입 방법
