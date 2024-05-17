@@ -1,12 +1,16 @@
 <template>
   <div>
     <h3>Savings List</h3>
-    
+    {{ store.savings }}
   </div>
 </template>
 
 <script setup>
-import { useCounterStore } from '@/stores/counter'
+import { useProductStore } from "@/stores/product";
+import { onMounted } from "vue";
+const store = useProductStore();
 
-const store = useCounterStore()
+onMounted(() => {
+  store.getSavings();
+});
 </script>

@@ -67,3 +67,8 @@ def article_like(request, article_pk):
         return Response(serializer.data)
     
 
+def article_comments_create(request, article_pk):
+    return
+
+def article_comments_delete(request, article_pk, comment_pk):
+    return

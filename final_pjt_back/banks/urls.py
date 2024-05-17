@@ -2,8 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('save-deposit-products/', views.save_deposit_products),
-    path('save-saving-products/', views.save_saving_products),
+    # path('save-saving-products/', views.save_saving_products),
     path('deposits/', views.deposit_list),
     path('deposit-options/<str:fin_prdt_cd>/', views.deposit_option_list),
     path('deposits/<str:fin_prdt_cd>/', views.deposit_detail),
