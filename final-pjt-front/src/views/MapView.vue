@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>은행 찾기</h2>
+    <h1>은행 찾기</h1>
     <div class="main">
       <div class="search-panel">
         <form action="#">
@@ -35,7 +35,7 @@
         <iframe
           src="https://www.google.com/maps/d/embed?mid=..."
           width="640"
-          height="480"
+          height="450"
         ></iframe>
       </div>
     </div>
@@ -58,7 +58,6 @@ onMounted(() => {});
   margin: auto;
   display: flex;
   flex-direction: column;
-  font-family: Arial, sans-serif;
 }
 
 .main {
@@ -81,7 +80,7 @@ onMounted(() => {});
 
 .map-container {
   width: 65%;
-  height: 500px;
+  height: 450px;
   border: 1px solid #ddd;
 }
 

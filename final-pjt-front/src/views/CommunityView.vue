@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Community Page</h1>
   </div>
 </template>
@@ -11,4 +11,11 @@ import { RouterLink } from "vue-router";
 onMounted(() => {});
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+</style>
