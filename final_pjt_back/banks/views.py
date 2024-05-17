@@ -12,7 +12,7 @@ from django.http import JsonResponse
 import requests
 
 from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers
-from .models import Deposit, Saving
+from .models import Deposit, DepositOptions, Saving, SavingOptions
 
 BASE_URL='http://finlife.fss.or.kr/finlifeapi/'
 
@@ -27,8 +27,9 @@ def save_deposit_products(request):
     response = requests.get(URL, params=params).json()
     baseList = response.get('result').get('baseList')
     optionList = response.get('result').get('optionList')
-
     for res in baseList:
+        if Deposit.objects.filter(fin_prdt_cd=res.get('fin_prdt_cd')):
+            continue
         save_data = {
             'fin_prdt_cd': res.get('fin_prdt_cd'),
             'kor_co_nm': res.get('kor_co_nm'),
@@ -38,8 +39,7 @@ def save_deposit_products(request):
             'join_member': res.get('join_member'),
             'join_way': res.get('join_way'),
             'spcl_cnd': res.get('spcl_cnd'),
-            'mtrt_int': float(res.get('mtrt_int')),
-            'max_limit': int(res.get('max_limit'))
+            'mtrt_int': res.get('mtrt_int'),
         }
         serializers = DepositSerializer(data=save_data)
         if serializers.is_valid(raise_exception=True):
@@ -73,6 +73,8 @@ def save_saving_products(request):
     optionList = response.get('result').get('optionList')
 
     for res in baseList:
+        if Saving.objects.filter(fin_prdt_cd=res.get('fin_prdt_cd')):
+            continue
         save_data = {
             'fin_prdt_cd': res.get('fin_prdt_cd'),
             'kor_co_nm': res.get('kor_co_nm'),
@@ -82,8 +84,7 @@ def save_saving_products(request):
             'join_member': res.get('join_member'),
             'join_way': res.get('join_way'),
             'spcl_cnd': res.get('spcl_cnd'),
-            'mtrt_int': float(res.get('mtrt_int')),
-            'max_limit': int(res.get('max_limit'))
+            'mtrt_int': res.get('mtrt_int'),
         }
         serializers = SavingSerializer(data=save_data)
         if serializers.is_valid(raise_exception=True):
@@ -106,15 +107,44 @@ def save_saving_products(request):
     return Response(status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def deposit_list(request):
-    return
+    if request.method == 'GET':
+        deposits = Deposit.objects.all()
+        serializer = DepositSerializer(deposits, many=True)
+        return Response(serializer.data)
 
+@api_view(['GET'])
+def deposit_option_list(request, fin_prdt_cd):
+    if request.method == 'GET':
+        options = DepositOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
+        seriarlizer = DepositOptionsSerializers(options, many=True)
+        return Response(seriarlizer.data)
+
+@api_view(['GET'])
 def deposit_detail(request, fin_prdt_cd):
-    return
+    if request.method == 'GET':
+        deposit = Deposit.objects.get(fin_prdt_cd=fin_prdt_cd)
+        serializer = DepositSerializer(deposit)
+        return Response(serializer.data)
 
+@api_view(['GET'])
 def saving_list(request):
-    return
+    if request.method == 'GET':
+        savings = Saving.objects.all()
+        serializer = SavingSerializer(savings, many=True)
+        return Response(serializer.data)
 
+@api_view(['GET'])
+def saving_option_list(request, fin_prdt_cd):
+    if request.method == 'GET':
+        options = SavingOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
+        seriarlizer = SavingOptionsSerializers(options, many=True)
+        return Response(seriarlizer.data)
+
+@api_view(['GET'])
 def saving_detail(request, fin_prdt_cd):
-    return
+    if request.method == 'GET':
+        saving = Saving.objects.get(fin_prdt_cd=fin_prdt_cd)
+        serializer = SavingSerializer(saving)
+        return Response(serializer.data)
