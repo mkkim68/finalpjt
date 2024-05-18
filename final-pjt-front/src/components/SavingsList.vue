@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div class="bank-container">
+    <div class="container">
       <div class="filter-section">
         <h4>검색하기</h4>
         <p>검색 조건을 입력하세요.</p>
@@ -31,11 +30,12 @@
       <div class="table-section">
         <h3>정기 적금</h3>
         <ul>
-          <li>리스트</li>
+          <li v-for="saving in savings" :key="saving.id">
+            {{ saving.kor_co_nm }} - {{ saving.fin_prdt_nm }}
+          </li>
         </ul>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -47,11 +47,11 @@ onMounted(() => {
   store.getSavings();
 });
 
-const savings = computed(() => store.products);
+const savings = computed(() => store.savings);
 </script>
 
 <style scoped>
-.bank-container {
+.container {
   display: flex;
   gap: 20px;
   width: 95%;
@@ -61,7 +61,7 @@ const savings = computed(() => store.products);
 .filter-section,
 .table-section {
   margin-top: 20px;
-  padding: 10px;
+  padding: 0 20px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
 }

@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <h1>Product Page</h1>
+    <h1>상품 조회</h1>
     <RouterLink :to="{ name: 'DepositList' }"> [예금] </RouterLink>
     <RouterLink :to="{ name: 'SavingsList' }"> [적금] </RouterLink>
-    <DepositList />
-    <SavingsList />
   </div>
+  <DepositList />
+  <SavingsList />
 </template>
 
 <script setup>
@@ -22,6 +22,7 @@ onMounted(() => {});
 
 <style scoped>
 .container {
-  margin-left: 30px;
+  width: 90%;
+  margin: auto;
 }
 </style>

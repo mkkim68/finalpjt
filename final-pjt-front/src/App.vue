@@ -18,8 +18,8 @@
           <img class="icon chart" src="@/assets/chart.png" alt="product"><span>차트</span></RouterLink>
         <span class="user">
           <RouterLink :to="{ name: 'SignUpView'}"><span>회원가입</span></RouterLink> |
-          <RouterLink :to="{ name: 'LogInView'}"><span>로그인</span></RouterLink> | 
-          <a class="hi" href=""><span>마이페이지</span></a>
+          <RouterLink :to="{ name: 'LogInView'}"><span>로그인</span></RouterLink>
+          <a class="hi" href=""><span>admin님 안녕하세요</span></a>
         </span>
       </div>
     </nav>
@@ -33,92 +33,119 @@ import { RouterView, RouterLink } from 'vue-router'
 
 <style scoped>
 
-  img.icon {
-    width: 50px;
-  }
+img.logo {
+  padding: 10px 20px;
+  width: 80px;
+}
 
-  div.menu {
-    display: flex;
-    align-items: center;
-    background-color: #dff7e4;
-    border-radius: 20px 0 0 20px;
-  }
-  div.menu > a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-decoration: none;
-    color: grey;
-    font-size: larger;
-    font-weight: 530;
-    margin: 20px;
-    padding: 5px;
-    width: 160px;
-  }
+img.icon {
+  width: 50px;
+  margin-right: 0px;
+}
 
-  div.menu > a > img {
-    padding : 0 10px;
-  }
+img.product {
+  width: 45px;
+  margin-right: 3px;
+}
 
-  span.logo {
-    padding-left: 10px;
-  }
+img.map {
+  margin-right: -5px;
+}
 
-  span.user {
-    margin-left: auto;
-    width: 200px;
-  }
-  span.user > a {
-    text-decoration: none;
-    font-size: large;
-  }
+div.menu {
+  background-color: #e4f9e9;
+  display: flex;
+  align-items: center;
+  border-radius: 0 0 10px 10px;
+  font-family: "Jua", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  font-style:normal;
+}
 
-  a:link, a:visited {
-    text-decoration: none;
-  }
+div.menu > a {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  color: grey;
+  font-size: larger;
+  font-weight: 530;
+  margin: 20px 0px;
+  padding: 5px;
+  width: 200px;
+}
 
-  a:hover > span {
-    color: #13BD7E;
-    font-weight: bolder;
-  }
+div.menu > a > span {
+  width: 80px;
+}
 
-  a:active > span {
-    font-weight: 2em;
-  }
+div.menu > a > img {
+  padding : 0 5px;
+}
+
+span.logo {
+  padding-left: 15px;
+  margin-right: 30px;
+}
+
+span.user {
+  margin-left: auto;
+  width: 200px;
+}
+
+span.user > a {
+  text-decoration: none;
+  color: black;
+  font-size: medium;
+}
+
+a:link, a:visited {
+  text-decoration: none;
+}
+
+a:hover > span {
+  color: #13BD7E;
+}
+
+a:active > span {
+  font-weight: 2em;
+}
 
 
-  a.hi {
-    overflow: hidden;
-    white-space: nowrap;
-    display : inline-block;
-  }
+a.hi {
+  overflow: hidden;
+  white-space: nowrap;
+  display : inline-block;
+}
 
-  a.hi:hover span {
-    display: inline-block;
-    font-weight : bolder;
-    opacity: 1;
-    animation: waveEffect 3s ease-in-out forwards;
-    align-items: center;
-  }
+a.hi:hover span {
+  display: inline-block;
+  font-weight : bolder;
+  opacity: 1;
+  animation: waveEffect 3s ease-in-out forwards;
+  align-items: center;
+}
 
-  @keyframes waveEffect {
-    0% {
-        opacity: 1;
-        color: black;
-        align-items: center;
-    
-    }
-    50% {
-        opacity: 1;
-        color: #5D87FF;
-        font-size : 1.2em;
-        align-items: center;
-    }
-    100% {
-        opacity: 1;
-        color: black;
-        align-items: center;
-    }
+@keyframes waveEffect {
+  0% {
+      opacity: 1;
+      color: black;
+      align-items: center;
+  
   }
+  50% {
+      opacity: 1;
+      color: #5D87FF;
+      font-size : 1.2em;
+      align-items: center;
+  }
+  100% {
+      opacity: 1;
+      color: black;
+      align-items: center;
+  }
+}
 
 </style>

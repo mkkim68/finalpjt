@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2>환율 계산기</h2>
+    <h1>환율 계산기</h1>
     <div class="currency-converter">
       <select>
         <option>달러</option>
@@ -10,7 +10,9 @@
       </select>
       <input type="text" placeholder="숫자를 입력하세요" />
       <p>* 엔화, 인도네시아 루피아는 100단위, 나머지는 모두 1단위</p>
-      <button>확인</button>
+      <div class="buttons">
+        <input type="submit" value="확인" />
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +31,6 @@ onMounted(() => {});
 .container {
   width: 90%;
   margin: auto;
-  font-family: Arial, sans-serif;
 }
 
 .currency-converter {
@@ -55,12 +56,21 @@ input[type="text"] {
   border-radius: 4px;
 }
 
-button {
-  padding: 10px 20px;
+div.buttons {
+	display: flex;
+  flex-direction: column;
+	align-items: center;
+  padding : 0 50px 0 0;
+}
+
+div.buttons > input {
+  padding: 10px 10px;
   background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 80px;
+  margin-top: 20px;
 }
 </style>

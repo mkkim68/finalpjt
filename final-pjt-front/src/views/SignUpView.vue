@@ -1,60 +1,112 @@
 <template>
-  <div>
-    <h1>Sign Up Page</h1>
-    <form @submit.prevent="signUp">
-      <label for="username">username: </label>
-      <input type="text" id="username" v-model.trim="username" /><br />
-
-      <label for="email">email: </label>
-      <input type="email" id="email" v-model.trim="email" /><br />
-
-      <label for="password1">password: </label>
-      <input type="password" id="password1" v-model.trim="password1" /><br />
-
-      <label for="password2">password confirmation: </label>
-      <input type="password" id="password2" v-model.trim="password2" />
-
-      <p>선택 사항</p>
-      <label for="age">age: </label>
-      <input type="number" id="age" v-model="age" /><br />
-
-      <label for="balance">balance(만 단위): </label>
-      <input type="number" id="balance" v-model="balance" /><br />
-
-      <label for="income">income(만 단위): </label>
-      <input type="number" id="income" v-model="income" /><br />
-
-      <label for="favorite_bank">favorite bank: </label>
-      <select id="favorite_bank" v-model="favorite_bank">
-        <option disabled>은행을 선택해주세요</option>
-        <option value="0010001">우리은행</option>
-        <option value="0010927">국민은행</option>
-        <option value="0011625">신한은행</option>
-        <option value="0010002">한국스탠다드차타드은행</option>
-        <option value="0010006">한국씨티은행</option>
-        <option value="0013909">하나은행</option>
-        <option value="0013175">농협</option>
-        <option value="0015130">카카오뱅크</option>
-        <option value="0017801">토스뱅크</option>
-        <option value="0010016">대구은행</option>
-        <option value="0010017">부산은행</option>
-        <option value="0010019">광주은행</option>
-        <option value="0010020">제주은행</option>
-        <option value="0014807">수협은행</option></select
-      ><br />
-
-      <label for="invest_type">저축성향: </label>
-      <select v-model="invest_type" id="invest_type">
-        <option disabled>저축성향을 입력하세요</option>
-        <option value="알뜰">알뜰형</option>
-        <option value="도전">도전형</option>
-        <option value="성실">성실형</option></select
-      ><br />
-
-      <label for="income">income(만 단위): </label>
-      <input type="number" id="income" v-model="income" /><br />
-
-      <input type="submit" value="SignUp" />
+  <div class="container">
+    <h1>회원가입</h1>
+    <form id="memberForm" @submit.prevent="signUp">
+      <div class="guide"><span class="important">*</span> 별표 표시는 <span class="important">필수</span> 입력 항목입니다.</div>
+      <table>
+        <tr>
+          <th>
+            <span class="important">* </span>
+            <label for="username">이름</label>
+          </th>
+          <td>
+            <input type="text" id="username" v-model.trim="username" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <span class="important">* </span>
+            <label for="email">이메일</label>
+          </th>
+          <td>
+            <input type="email" id="email" v-model.trim="email" /><br />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <span class="important">* </span>
+            <label for="password1">비밀번호</label>
+          </th>
+          <td>
+            <input type="password" id="password1" v-model.trim="password1" /><br />
+            <span style="font-size:0.7em;">※ 대문자, 숫자, "~!@#()_|. 특수기호를 포함한 3~5자</span>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <span class="important">* </span>
+            <label for="password2">비밀번호 확인</label>
+          </th>
+          <td>
+            <input type="password" id="password2" v-model.trim="password2" />
+          </td>
+        </tr>
+        
+        <tr>
+          <th>
+            <label for="age">나이</label>
+          </th>
+          <td>
+            <input type="number" id="age" v-model="age" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="balance">잔액(만원 단위)</label>
+          </th>
+          <td>
+            <input type="number" id="balance" v-model="balance" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="income">연봉(만원 단위)</label>
+          </th>
+          <td>
+            <input type="number" id="income" v-model="income" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="favorite_bank">주거래 은행</label>
+          </th>
+          <td>
+            <select id="favorite_bank" v-model="favorite_bank">
+              <option disabled>은행을 선택해주세요</option>
+              <option value="0010001">우리은행</option>
+              <option value="0010927">국민은행</option>
+              <option value="0011625">신한은행</option>
+              <option value="0010002">한국스탠다드차타드은행</option>
+              <option value="0010006">한국씨티은행</option>
+              <option value="0013909">하나은행</option>
+              <option value="0013175">농협</option>
+              <option value="0015130">카카오뱅크</option>
+              <option value="0017801">토스뱅크</option>
+              <option value="0010016">대구은행</option>
+              <option value="0010017">부산은행</option>
+              <option value="0010019">광주은행</option>
+              <option value="0010020">제주은행</option>
+              <option value="0014807">수협은행</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="invest_type">저축성향</label>
+          </th>
+          <td>
+            <select v-model="invest_type" id="invest_type">
+              <option disabled>저축성향을 입력하세요</option>
+              <option value="알뜰">알뜰형</option>
+              <option value="도전">도전형</option>
+              <option value="성실">성실형</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <div class="buttons">
+        <input type="submit" value="회원가입" />
+      </div>
     </form>
   </div>
 </template>
@@ -90,4 +142,63 @@ const signUp = function () {
 };
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#memberForm {
+	background-color: #f2f2f2;
+	border-radius: 10px;
+  margin-bottom: 50px;
+	padding: 60px 60px;
+	width: 955px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+}
+
+div.guide {
+	font-size: 0.8em;
+	margin-left: 20px;
+}
+span.important {
+	color : #0A58CA;
+}
+
+table {
+	margin-top: 20px;
+	background-color:rgb(210, 210, 210);
+	margin : 20px 10px 10px 0;
+	border-radius: 10px;
+}
+th {
+	padding : 10px 20px;
+}
+td {
+	width : 645px;
+	padding : 10px 20px 10px 40px;
+}
+
+div.buttons {
+	display: flex;
+  flex-direction: column;
+	align-items: center;
+  padding : 0 50px 0 0;
+}
+
+div.buttons > input {
+  padding: 10px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 80px;
+  margin-top: 20px;
+}
+</style>

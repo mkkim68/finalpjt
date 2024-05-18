@@ -47,7 +47,7 @@ onMounted(() => {
   store.getDeposits();
 });
 
-const deposits = computed(() => store.products);
+const deposits = computed(() => store.deposits);
 </script>
 
 <style scoped>
@@ -61,7 +61,7 @@ const deposits = computed(() => store.products);
 .filter-section,
 .table-section {
   margin-top: 20px;
-  padding: 10px;
+  padding: 0 20px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
 }
