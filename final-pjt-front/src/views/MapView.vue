@@ -93,6 +93,11 @@ label {
   margin-bottom: 5px;
 }
 
+select {
+  padding-right: 2em; /* 동작 안함*/
+  cursor: pointer;
+}
+
 select,
 button {
   width: 100%;

@@ -7,7 +7,7 @@
         <tr>
           <th>
             <span class="important">* </span>
-            <label for="username">이름</label>
+            <label for="username">아이디</label>
           </th>
           <td>
             <input type="text" id="username" v-model.trim="username" />
@@ -145,16 +145,18 @@ const signUp = function () {
 <style scoped>
 .container {
   width: 90%;
-  margin: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 20px auto;
 }
 
 #memberForm {
 	background-color: #f2f2f2;
 	border-radius: 10px;
   margin-bottom: 50px;
-	padding: 60px 60px;
+	padding: 30px 60px;
 	width: 955px;
   display: flex;
   flex-direction: column;
@@ -164,7 +166,6 @@ const signUp = function () {
 
 div.guide {
 	font-size: 0.8em;
-	margin-left: 20px;
 }
 span.important {
 	color : #0A58CA;
@@ -173,22 +174,34 @@ span.important {
 table {
 	margin-top: 20px;
 	background-color:rgb(210, 210, 210);
-	margin : 20px 10px 10px 0;
+	margin : 20px;
 	border-radius: 10px;
 }
 th {
-	padding : 10px 20px;
+	padding : 12px 50px;
 }
 td {
-	width : 645px;
-	padding : 10px 20px 10px 40px;
+	width : 400px;
+  padding : 12px 50px;
+}
+
+td > * {
+  width: 180px;
+  height: 23px;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+td > select {
+  padding: 0px;
+  margin: 0px;
 }
 
 div.buttons {
 	display: flex;
   flex-direction: column;
 	align-items: center;
-  padding : 0 50px 0 0;
 }
 
 div.buttons > input {
