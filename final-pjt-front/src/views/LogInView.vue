@@ -6,7 +6,7 @@
         <table>
           <tr>
             <th>
-              <label for="username">이름: </label>
+              <label for="username">아이디: </label>
             </th>
             <td>
               <input type="text" id="username" v-model.trim="username" />
@@ -53,13 +53,16 @@ const logIn = function () {
   margin: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 20px auto;
 }
 
 #memberForm {
 	background-color: #f2f2f2;
 	border-radius: 10px;
 	margin-bottom: 50px;
-	padding: 60px 60px;
+	padding:15px 60px;
 	width: 955px;
   display: flex;
   flex-direction: column;
@@ -88,7 +91,6 @@ div.buttons {
 	display: flex;
   flex-direction: column;
 	align-items: center;
-  padding : 0 50px 0 0;
 }
 
 div.buttons > input {

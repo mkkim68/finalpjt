@@ -34,7 +34,6 @@ import { RouterView, RouterLink } from 'vue-router'
 <style scoped>
 
 img.logo {
-  padding: 10px 20px;
   width: 80px;
 }
 

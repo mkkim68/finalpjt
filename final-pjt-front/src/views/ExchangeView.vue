@@ -42,6 +42,7 @@ onMounted(() => {});
 
 select {
   width: 100px;
+  cursor: pointer;
 }
 
 input {
