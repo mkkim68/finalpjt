@@ -24,7 +24,11 @@ const router = createRouter({
       component: ProductView,
       children: [
         { path: "", name: "ProductView", component: ProductView },
-        { path: "deposit", name: "DepositList", component: DepositList },
+        {
+          path: "deposit",
+          name: "DepositList",
+          component: DepositList,
+        },
         { path: "savings", name: "SavingsList", component: SavingsList },
       ],
       beforeEnter: (to, from) => {
