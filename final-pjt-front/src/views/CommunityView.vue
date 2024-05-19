@@ -14,7 +14,7 @@ onMounted(() => {});
 <style scoped>
 .container {
   width: 90%;
-  margin: auto;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
 }

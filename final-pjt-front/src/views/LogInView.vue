@@ -50,7 +50,6 @@ const logIn = function () {
 <style scoped>
 .container {
   width: 90%;
-  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;

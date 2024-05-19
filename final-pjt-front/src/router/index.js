@@ -22,19 +22,19 @@ const router = createRouter({
     {
       path: "/product",
       component: ProductView,
+      redirect: "/product/deposit", // 기본적으로 DepositList로 리디렉션
       children: [
-        { path: "", name: "ProductView", component: ProductView },
         {
           path: "deposit",
           name: "DepositList",
           component: DepositList,
         },
-        { path: "savings", name: "SavingsList", component: SavingsList },
+        {
+          path: "savings",
+          name: "SavingsList",
+          component: SavingsList,
+        },
       ],
-      beforeEnter: (to, from) => {
-        console.log(to);
-        console.log(from);
-      },
     },
     {
       path: "/exchange",
@@ -69,15 +69,17 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from) => {
+
+router.beforeEach((to, from, next) => {
   const store = useProductStore();
   if (to.name === "~View" && !store.isLogin) {
     window.alert("로그인이 필요합니다.");
-    return { name: "LogInView" };
-  }
-  if ((to.name === "SignUpView" || to.name === "LogInView") && store.isLogin) {
+    next({ name: "LogInView" });
+  } else if ((to.name === "SignUpView" || to.name === "LogInView") && store.isLogin) {
     window.alert("이미 로그인이 되어있습니다.");
-    return { name: "ProductView" };
+    next({ name: "ProductView" });
+  } else {
+    next();
   }
 });
 

@@ -6,7 +6,7 @@
           <RouterLink to="/">
             <img class="icon logo" src="@/assets/logo.png" alt="product"></RouterLink>
         </span>
-        <RouterLink :to="{ name: 'ProductView'}">
+        <RouterLink :to="{ name: 'DepositList'}">
           <img class="icon product" src="@/assets/product.png" alt="product"><span>예적금</span></RouterLink>
         <RouterLink :to="{ name: 'ExchangeView'}">
           <img class="icon exchange" src="@/assets/exchange.png" alt="product"><span>환율</span></RouterLink>
@@ -145,6 +145,11 @@ a.hi:hover span {
       color: black;
       align-items: center;
   }
+}
+
+.active {
+  font-weight: bold;
+  color: #4caf50;
 }
 
 </style>

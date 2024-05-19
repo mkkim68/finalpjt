@@ -1,19 +1,16 @@
 <template>
   <div class="container">
     <h1>상품 조회</h1>
-    <RouterLink :to="{ name: 'DepositList' }"> [예금] </RouterLink>
-    <RouterLink :to="{ name: 'SavingsList' }"> [적금] </RouterLink>
+    <RouterLink to="/product/deposit" active-class="active"> 예금 </RouterLink> |
+    <RouterLink to="/product/savings" active-class="active"> 적금 </RouterLink>
+    <router-view></router-view>
   </div>
-  <DepositList />
-  <SavingsList />
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useProductStore } from "@/stores/product";
 import { RouterLink } from "vue-router";
-import DepositList from "@/components/DepositList.vue";
-import SavingsList from "@/components/SavingsList.vue";
 
 const store = useProductStore();
 
@@ -23,22 +20,17 @@ onMounted(() => {});
 <style scoped>
 .container {
   width: 90%;
-  margin: auto;
-}
-.filter-section,
-.table-section {
-  margin-top: 20px;
-  padding: 0 20px;
-  background-color: #f4f4f4;
-  border: 1px solid #ddd;
+  margin: 20px auto;
 }
 
-.filter-section {
-  flex: 1;
-  max-width: 30%;
+a {
+  color: grey;
+  font-weight: normal;
+  text-decoration: none;
 }
 
-.table-section {
-  flex: 2;
+.active {
+  font-weight: bold;
+  color: #4caf50;
 }
 </style>

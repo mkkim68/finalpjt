@@ -1,99 +1,148 @@
 <template>
-  <div class="container">
+  <div class="container2">
     <div class="filter-section">
-      <form @submit.prevent="depositFilter(bank, duration)">
+      <form @submit.prevent="savingFilter">
         <p>검색 조건을 입력하세요.</p>
         <hr />
-        <label for="bank">은행을 선택하세요</label>
-        <br />
-        <select name="bank" id="bank" v-model="bank">
-          <option disabled>은행을 선택해주세요</option>
-          <option value="all">전체</option>
-          <option value="0010001">우리은행</option>
-          <option value="0010927">국민은행</option>
-          <option value="0011625">신한은행</option>
-          <option value="0010002">한국스탠다드차타드은행</option>
-          <option value="0010006">한국씨티은행</option>
-          <option value="0013909">하나은행</option>
-          <option value="0013175">농협은행주식회사</option>
-          <option value="0015130">카카오뱅크</option>
-          <option value="0017801">토스뱅크</option>
-          <option value="0010016">대구은행</option>
-          <option value="0010017">부산은행</option>
-          <option value="0010019">광주은행</option>
-          <option value="0010020">제주은행</option>
-          <option value="0014807">수협은행</option></select
-        ><br />
-        <label for="duration">예치기간</label><br />
-        <select name="duration" id="duration" v-model="duration">
-          <option disabled>기간을 선택해주세요</option>
-          <option value="all">전체기간</option>
-          <optgroup label="단기">
-            <option value="1">1년 미만</option>
-            <option value="2">1년 이상 2년 미만</option>
-          </optgroup>
-          <optgroup label="중기">
-            <option value="3">2년 이상 3년 미만</option>
-            <option value="4">3년 이상</option>
-          </optgroup>
-        </select>
+        <div class="condition">
+          <label for="bank">은행</label>
+          <br />
+          <select name="bank" id="bank" v-model="bank">
+            <option disabled value="null">은행을 선택해주세요</option>
+            <option value="all">전체</option>
+            <option value="우리은행">우리은행</option>
+            <option value="국민은행">국민은행</option>
+            <option value="신한은행">신한은행</option>
+            <option value="한국스탠다드차타드은행">한국스탠다드차타드은행</option>
+            <option value="한국씨티은행">한국씨티은행</option>
+            <option value="하나은행">하나은행</option>
+            <option value="농협은행주식회사">농협은행주식회사</option>
+            <option value="카카오뱅크">카카오뱅크</option>
+            <option value="토스뱅크">토스뱅크</option>
+            <option value="대구은행">대구은행</option>
+            <option value="부산은행">부산은행</option>
+            <option value="광주은행">광주은행</option>
+            <option value="제주은행">제주은행</option>
+            <option value="수협은행">수협은행</option>
+          </select><br />
+        </div>
+        <div class="condition">
+          <label for="duration">예치기간</label><br />
+          <select name="duration" id="duration" v-model="duration">
+            <option disabled value="null">기간을 선택해주세요</option>
+            <option value="all">전체기간</option>
+            <optgroup label="단기">
+              <option value="6">1년 미만</option>
+              <option value="12">1년 이상 2년 미만</option>
+            </optgroup>
+            <optgroup label="중기">
+              <option value="24">2년 이상 3년 미만</option>
+              <option value="36">3년 이상</option>
+            </optgroup>
+          </select>
+        </div>
         <hr />
-        <input type="submit" value="확인" />
+        <div class="buttons">
+          <input type="submit" value="확인" />
+        </div>
       </form>
     </div>
     <div class="table-section">
       <h3>정기 적금</h3>
-      <ul>
-        <li v-for="saving in savings" :key="saving.id">
-          <span>{{ saving.kor_co_nm }}</span> -
-          <span>{{ saving.fin_prdt_nm }}</span>
-          <div>
-            <h4>옵션</h4>
-            <div v-for="option in saving.options">
-              <span
-                >{{ option.intr_rate_type_nm }}/저축 금리:
-                {{ option.intr_rate }}/최고 우대 금리:
-                {{ option.intr_rate2 }}/저축 기간: {{ option.save_trm }}</span
-              >
-            </div>
-          </div>
-        </li>
-      </ul>
+      <table>
+        <thead style="text-align: center;">
+          <tr>
+            <th class="first" rowspan="2">은행명</th>
+            <th class="second" rowspan="2">상품명</th>
+            <th class="third" colspan="4">금리</th>
+          </tr>
+          <tr>
+            <th>6개월</th>
+            <th>12개월</th>
+            <th>24개월</th>
+            <th>36개월</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="saving in filteredSavings" :key="saving.id">
+            <td>{{ saving.kor_co_nm }}</td>
+            <td>{{ saving.fin_prdt_nm }}</td>
+            <td>{{ getInterestRate(saving, 6) }}</td>
+            <td>{{ getInterestRate(saving, 12) }}</td>
+            <td>{{ getInterestRate(saving, 24) }}</td>
+            <td>{{ getInterestRate(saving, 36) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useProductStore } from "@/stores/product";
 
+const bank = ref("all");
+const duration = ref("all");
+const filteredSavings = ref([]);
+
 const store = useProductStore();
-onMounted(() => {
-  store.getSavings();
+onMounted(async () => {
+  await store.getSavings();
+  savingFilter();
 });
 
 const savings = computed(() => store.savings);
+
+const savingFilter = () => {
+  let filtered = savings.value;
+
+  if (bank.value !== 'all') {
+    filtered = filtered.filter(saving => saving.kor_co_nm === bank.value);
+  }
+
+  if (duration.value !== 'all') {
+    const durationNum = Number(duration.value);
+    filtered = filtered.map(saving => {
+      const filteredOptions = saving.options.filter(option => Number(option.save_trm) === durationNum);
+      return { ...saving, options: filteredOptions };
+    }).filter(saving => saving.options.length > 0);
+  } else {
+    filtered = filtered.map(saving => {
+      const filteredOptions = saving.options.filter(option => [6, 12, 24, 36].includes(Number(option.save_trm)));
+      return { ...saving, options: filteredOptions };
+    });
+  }
+
+  filteredSavings.value = filtered;
+};
+
+const getInterestRate = (saving, term) => {
+  const option = saving.options.find(option => Number(option.save_trm) === term);
+  return option ? option.intr_rate : '-';
+};
 </script>
 
 <style scoped>
-.container {
+.container2 {
   display: flex;
   gap: 20px;
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
 }
 
 .filter-section,
 .table-section {
-  margin-top: 20px;
-  padding: 0 20px;
+  margin-top: 2px;
+  padding: 20px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
 }
 
 .filter-section {
   flex: 1;
-  max-width: 18%;
+  max-width: 250px;
 }
 
 div.condition {
@@ -101,19 +150,15 @@ div.condition {
 }
 
 form > div > select {
-  width: 50%;
-  height: 25px;
+  width: 100%;
+  height: 30px;
   padding: 1px 0px;
   cursor: pointer;
 }
 
-form > div > p {
-  font-size: 0.85em;
-  margin: 5px 0px;
-}
-
 .table-section {
   flex: 2;
+  width: 100%;
 }
 
 table {
@@ -133,7 +178,11 @@ th.first {
 }
 
 th.second {
-  width: 30%
+  width: 32%;
+}
+
+th.third {
+  width: 20%;
 }
 
 div.buttons {
@@ -152,4 +201,5 @@ div.buttons > input {
   width: 80px;
   margin-top: 20px;
 }
+
 </style>

@@ -181,14 +181,14 @@ th {
 	padding : 12px 50px;
 }
 td {
-	width : 400px;
+	width : 450px;
   padding : 12px 50px;
 }
 
 td > * {
   width: 180px;
-  height: 23px;
-  padding: 0px;
+  height: 25px;
+  padding: 0px 5px;
   margin: 0px;
   border: 0px;
 }
