@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useProductStore } from "@/stores/product";
 import { RouterLink } from "vue-router";
 import DepositList from "@/components/DepositList.vue";
@@ -24,5 +24,21 @@ onMounted(() => {});
 .container {
   width: 90%;
   margin: auto;
+}
+.filter-section,
+.table-section {
+  margin-top: 20px;
+  padding: 0 20px;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+}
+
+.filter-section {
+  flex: 1;
+  max-width: 30%;
+}
+
+.table-section {
+  flex: 2;
 }
 </style>
