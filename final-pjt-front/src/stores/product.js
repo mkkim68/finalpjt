@@ -20,7 +20,20 @@ export const useProductStore = defineStore(
         // },
       })
         .then((response) => {
-          deposits.value = response.data;
+          axios({
+            method: "get",
+            url: `${API_URL}/api/bank/deposit-options/`,
+          })
+            .then((res) => {
+              console.log(res.data);
+              for (const deposit of response.data) {
+                const option = res.data.filter(
+                  (item) => item.fin_prdt_cd === deposit.fin_prdt_cd
+                );
+                deposits.value.push({ ...deposit, options: option });
+              }
+            })
+            .catch((err) => console.log(err));
         })
         .catch((error) => {
           console.log(error);
@@ -36,7 +49,20 @@ export const useProductStore = defineStore(
         // },
       })
         .then((response) => {
-          savings.value = response.data;
+          axios({
+            method: "get",
+            url: `${API_URL}/api/bank/saving-options/`,
+          })
+            .then((res) => {
+              console.log(res.data);
+              for (const saving of response.data) {
+                const option = res.data.filter(
+                  (item) => item.fin_prdt_cd === saving.fin_prdt_cd
+                );
+                savings.value.push({ ...saving, options: option });
+              }
+            })
+            .catch((err) => console.log(err));
         })
         .catch((error) => {
           console.log(error);

@@ -141,6 +141,8 @@ def deposit_list(request):
                 serializers.save()
 
         for res in optionList:
+            if DepositOptions.objects.filter(fin_prdt_cd=res.get('fin_prdt_cd'),save_trm=res.get('save_trm'), intr_rate_type_nm=res.get('intr_rate_type_nm')):
+                continue
             save_data = {
                 'fin_prdt_cd': res.get('fin_prdt_cd'),
                 'intr_rate_type_nm': res.get('intr_rate_type_nm'),
@@ -158,9 +160,9 @@ def deposit_list(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-def deposit_option_list(request, fin_prdt_cd):
+def deposit_option_list(request):
     if request.method == 'GET':
-        options = DepositOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
+        options = DepositOptions.objects.all()
         seriarlizer = DepositOptionsSerializers(options, many=True)
         return Response(seriarlizer.data)
 
@@ -204,6 +206,8 @@ def saving_list(request):
                 serializers.save()
 
         for res in optionList:
+            if SavingOptions.objects.filter(fin_prdt_cd=res.get('fin_prdt_cd'),save_trm=res.get('save_trm'), intr_rate_type_nm=res.get('intr_rate_type_nm'), rsrv_type_nm=res.get('rsrv_type_nm')):
+                continue
             save_data = {
                 'fin_prdt_cd': res.get('fin_prdt_cd'),
                 'intr_rate_type_nm': res.get('intr_rate_type_nm'),
@@ -222,9 +226,9 @@ def saving_list(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-def saving_option_list(request, fin_prdt_cd):
+def saving_option_list(request):
     if request.method == 'GET':
-        options = SavingOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
+        options = SavingOptions.objects.all()
         seriarlizer = SavingOptionsSerializers(options, many=True)
         return Response(seriarlizer.data)
 
@@ -234,3 +238,4 @@ def saving_detail(request, fin_prdt_cd):
         saving = Saving.objects.get(fin_prdt_cd=fin_prdt_cd)
         serializer = SavingSerializer(saving)
         return Response(serializer.data)
+    
