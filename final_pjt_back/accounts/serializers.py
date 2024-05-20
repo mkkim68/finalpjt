@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+# from .models import User
 from django.contrib.auth import get_user_model
 from dj_rest_auth.registration.serializers import RegisterSerializer
 # User = get_user_model()
@@ -22,3 +22,9 @@ class CustomRegisterSerializer(RegisterSerializer):
         data['favorite_bank'] = self.validated_data.get('favorite_bank', '')
         data['invest_type'] = self.validated_data.get('invest_type', '')
         return data
+    
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = '__all__'
+        read_only_fields=['deposit', 'saving']

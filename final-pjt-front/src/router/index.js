@@ -10,6 +10,10 @@ import ChartView from "@/views/ChartView.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import LogInView from "@/views/LogInView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import ArticleDetail from "@/components/ArticleDetail.vue";
+import ArticleList from "@/components/ArticleList.vue";
+import ArticleForm from "@/components/ArticleForm.vue";
+import ArticleUpdate from "@/components/ArticleUpdate.vue";
 import { useProductStore } from "@/stores/product";
 
 const router = createRouter({
@@ -49,8 +53,31 @@ const router = createRouter({
     },
     {
       path: "/community",
-      name: "CommunityView",
+      name: "community",
+      redirect: "/community",
       component: CommunityView,
+      children: [
+        {
+          path: "",
+          name: "community-list",
+          component: ArticleList,
+        },
+        {
+          path: ":article_id",
+          name: "community-detail",
+          component: ArticleDetail,
+        },
+        {
+          path: "create",
+          name: "community-create",
+          component: ArticleForm,
+        },
+        {
+          path: ":article_id/update",
+          name: "community-update",
+          component: ArticleUpdate,
+        },
+      ],
     },
     {
       path: "/chart",
@@ -68,7 +95,7 @@ const router = createRouter({
       component: LogInView,
     },
     {
-      path: "/profile/:username",
+      path: "/profile/:user_id",
       name: "ProfileView",
       component: ProfileView,
     },
