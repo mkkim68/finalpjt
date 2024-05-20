@@ -58,38 +58,38 @@ const logIn = function () {
 }
 
 #memberForm {
-	background-color: #f2f2f2;
-	border-radius: 10px;
-	margin-bottom: 50px;
-	padding:15px 60px;
-	width: 955px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  margin-bottom: 50px;
+  padding: 15px 60px;
+  width: 955px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 table {
-	margin-top: 20px;
-	background-color:rgb(210, 210, 210);
-	margin : 60px 10px 10px 0;
-	border-radius: 10px;
+  margin-top: 20px;
+  background-color: rgb(210, 210, 210);
+  margin: 60px 10px 10px 0;
+  border-radius: 10px;
 }
 th {
-	padding : 50px 0 60px 50px;
+  padding: 50px 0 60px 50px;
 }
 td {
-	width : 400px;
-	padding : 10px 70px 10px 60px;
+  width: 400px;
+  padding: 10px 70px 10px 60px;
 }
 td > input {
-	height : 50px;
-	width : 300px;
+  height: 50px;
+  width: 300px;
 }
 
 div.buttons {
-	display: flex;
+  display: flex;
   flex-direction: column;
-	align-items: center;
+  align-items: center;
 }
 
 div.buttons > input {
@@ -102,5 +102,4 @@ div.buttons > input {
   width: 80px;
   margin-top: 20px;
 }
-
 </style>

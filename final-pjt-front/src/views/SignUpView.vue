@@ -2,7 +2,10 @@
   <div class="container">
     <h1>회원가입</h1>
     <form id="memberForm" @submit.prevent="signUp">
-      <div class="guide"><span class="important">*</span> 별표 표시는 <span class="important">필수</span> 입력 항목입니다.</div>
+      <div class="guide">
+        <span class="important">*</span> 별표 표시는
+        <span class="important">필수</span> 입력 항목입니다.
+      </div>
       <table>
         <tr>
           <th>
@@ -18,9 +21,7 @@
             <span class="important">* </span>
             <label for="email">이메일</label>
           </th>
-          <td>
-            <input type="email" id="email" v-model.trim="email" /><br />
-          </td>
+          <td><input type="email" id="email" v-model.trim="email" /><br /></td>
         </tr>
         <tr>
           <th>
@@ -28,8 +29,14 @@
             <label for="password1">비밀번호</label>
           </th>
           <td>
-            <input type="password" id="password1" v-model.trim="password1" /><br />
-            <span style="font-size:0.7em;">※ 대문자, 숫자, "~!@#()_|. 특수기호를 포함한 3~5자</span>
+            <input
+              type="password"
+              id="password1"
+              v-model.trim="password1"
+            /><br />
+            <span style="font-size: 0.7em"
+              >※ 대문자, 숫자, "~!@#()_|. 특수기호를 포함한 3~5자</span
+            >
           </td>
         </tr>
         <tr>
@@ -41,7 +48,7 @@
             <input type="password" id="password2" v-model.trim="password2" />
           </td>
         </tr>
-        
+
         <tr>
           <th>
             <label for="age">나이</label>
@@ -136,6 +143,7 @@ const signUp = function () {
     age: age.value,
     balance: balance.value,
     income: income.value,
+    favorite_bank: favorite_bank.value,
     invest_type: invest_type.value,
   };
   store.signUp(payload);
@@ -153,11 +161,11 @@ const signUp = function () {
 }
 
 #memberForm {
-	background-color: #f2f2f2;
-	border-radius: 10px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
   margin-bottom: 50px;
-	padding: 30px 60px;
-	width: 955px;
+  padding: 30px 60px;
+  width: 955px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,24 +173,24 @@ const signUp = function () {
 }
 
 div.guide {
-	font-size: 0.8em;
+  font-size: 0.8em;
 }
 span.important {
-	color : #0A58CA;
+  color: #0a58ca;
 }
 
 table {
-	margin-top: 20px;
-	background-color:rgb(210, 210, 210);
-	margin : 20px;
-	border-radius: 10px;
+  margin-top: 20px;
+  background-color: rgb(210, 210, 210);
+  margin: 20px;
+  border-radius: 10px;
 }
 th {
-	padding : 12px 50px;
+  padding: 12px 50px;
 }
 td {
-	width : 450px;
-  padding : 12px 50px;
+  width: 450px;
+  padding: 12px 50px;
 }
 
 td > * {
@@ -199,9 +207,9 @@ td > select {
 }
 
 div.buttons {
-	display: flex;
+  display: flex;
   flex-direction: column;
-	align-items: center;
+  align-items: center;
 }
 
 div.buttons > input {

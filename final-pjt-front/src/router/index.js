@@ -9,6 +9,7 @@ import CommunityView from "@/views/CommunityView.vue";
 import ChartView from "@/views/ChartView.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import LogInView from "@/views/LogInView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 import { useProductStore } from "@/stores/product";
 
 const router = createRouter({
@@ -66,16 +67,23 @@ const router = createRouter({
       name: "LogInView",
       component: LogInView,
     },
+    {
+      path: "/profile/:username",
+      name: "ProfileView",
+      component: ProfileView,
+    },
   ],
 });
-
 
 router.beforeEach((to, from, next) => {
   const store = useProductStore();
   if (to.name === "~View" && !store.isLogin) {
     window.alert("로그인이 필요합니다.");
     next({ name: "LogInView" });
-  } else if ((to.name === "SignUpView" || to.name === "LogInView") && store.isLogin) {
+  } else if (
+    (to.name === "SignUpView" || to.name === "LogInView") &&
+    store.isLogin
+  ) {
     window.alert("이미 로그인이 되어있습니다.");
     next({ name: "ProductView" });
   } else {

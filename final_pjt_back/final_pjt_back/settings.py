@@ -65,6 +65,12 @@ REST_FRAMEWORK = {
     ],
 }
 
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+}
+
+ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'
+
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 MIDDLEWARE = [
