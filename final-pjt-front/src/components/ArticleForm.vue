@@ -1,0 +1,45 @@
+<template>
+  <div>
+    <h1>새 게시글 작성</h1>
+    <form @submit.prevent="create">
+      <label for="title">제목</label><br />
+      <input
+        type="text"
+        id="title"
+        v-model.trim="title"
+        placeholder="제목을 입력해주세요."
+      /><br />
+      <label for="content">내용</label><br />
+      <textarea
+        type="text"
+        id="content"
+        v-model.trim="content"
+        placeholder="내용을 입력해주세요."
+      />
+      <br />
+      <input type="submit" value="확인~~" />
+    </form>
+  </div>
+</template>
+
+<script setup>
+import { useArticleStore } from "@/stores/article";
+import { useAuthStore } from "@/stores/auth";
+import { ref } from "vue";
+
+const articleStore = useArticleStore();
+const authStore = useAuthStore();
+const title = ref(null);
+const content = ref(null);
+
+const create = function () {
+  const payload = {
+    title: title.value,
+    content: content.value,
+    token: authStore.token,
+  };
+  articleStore.createArticle(payload);
+};
+</script>
+
+<style lang="scss" scoped></style>

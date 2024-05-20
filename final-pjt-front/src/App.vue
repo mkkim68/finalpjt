@@ -26,7 +26,7 @@
             >지도</span
           ></RouterLink
         >
-        <RouterLink :to="{ name: 'CommunityView' }">
+        <RouterLink :to="{ name: 'community' }">
           <img
             class="icon community"
             src="@/assets/community.png"
@@ -38,20 +38,25 @@
             >차트</span
           ></RouterLink
         >
-        <span class="user">
-          <RouterLink :to="{ name: 'SignUpView' }" v-if="!authStore.isLogin"
+        <span class="user" v-if="!authStore.isLogin">
+          <RouterLink :to="{ name: 'SignUpView' }"
             ><span>회원가입</span></RouterLink
           >
-          <span v-if="!authStore.isLogin"> | </span>
-          <RouterLink :to="{ name: 'LogInView' }" v-if="!authStore.isLogin"
+          <span> | </span>
+          <RouterLink :to="{ name: 'LogInView' }"
             ><span>로그인</span></RouterLink
           >
-          <a @click="authStore.logOut" v-else><span>로그아웃</span></a>
+        </span>
+        <span class="user" v-else>
+          <a @click="authStore.logOut"><span>로그아웃</span></a>
           <RouterLink
-            :to="{ name: 'ProfileView' }"
-            v-if="authStore.isLogin"
+            :to="{
+              name: 'ProfileView',
+              params: { user_id: authStore.info.id },
+            }"
             class="hi"
-            ><span>admin님 안녕하세요</span></RouterLink
+            v-if="authStore.info"
+            ><span>{{ authStore.info.username }}님 안녕하세요</span></RouterLink
           >
         </span>
       </div>
