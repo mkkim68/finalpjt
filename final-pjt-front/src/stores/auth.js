@@ -7,12 +7,12 @@ export const useAuthStore = defineStore(
   "auth",
   () => {
     const token = ref(null);
+    const info = ref([]);
     const API_URL = "http://127.0.0.1:8000";
     const router = useRouter();
 
     const signUp = function (payload) {
       const data = ref({});
-      const { username, password1 } = payload;
       for (const item in payload) {
         if (payload[item] !== null) {
           data.value[item] = payload[item];
@@ -43,6 +43,14 @@ export const useAuthStore = defineStore(
         .then((res) => {
           token.value = res.data.key;
           router.push({ name: "HomeView" });
+          axios({
+            method: "get",
+            url: `${API_URL}/accounts/${username}/`,
+          })
+            .then((res) => {
+              info.value = res.data;
+            })
+            .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
     };
@@ -55,12 +63,9 @@ export const useAuthStore = defineStore(
         .then((res) => {
           router.push({ name: "LogInView" });
           token.value = null;
+          info.value = null;
         })
         .catch((err) => console.log(err));
-    };
-
-    const getUser = function () {
-      console.log();
     };
 
     const isLogin = computed(() => {
@@ -71,7 +76,7 @@ export const useAuthStore = defineStore(
       }
     });
 
-    return { API_URL, signUp, logIn, token, isLogin, logOut };
+    return { API_URL, signUp, logIn, token, isLogin, logOut, info };
   },
   { persist: true }
 );
