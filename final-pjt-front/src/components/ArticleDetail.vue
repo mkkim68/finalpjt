@@ -1,5 +1,5 @@
 <template>
-  <div v-if="article">
+  <div v-if="article" class="container">
     <h1>{{ article.title }}</h1>
     <p>
       작성자:
@@ -17,10 +17,19 @@
         삭제
       </button>
     </div>
+    <div>
+      <button @click="like">좋아요</button>
+    </div>
+    <div>
+      <h3>댓글 {{ article.comment_count }}개</h3>
+      <CommentForm :article_id="id" />
+      <p v-for="comment in article.comment_set">{{ comment.content }}</p>
+    </div>
   </div>
 </template>
 
 <script setup>
+import CommentForm from "./CommentForm.vue";
 import { useRoute, RouterLink } from "vue-router";
 import { ref, onMounted } from "vue";
 import { useArticleStore } from "@/stores/article";
@@ -57,6 +66,14 @@ onMounted(() => {
     })
     .catch((err) => console.log(err));
 });
+
+const like = function () {
+  const payload = {
+    article_id: id.value,
+    token: authStore.token,
+  };
+  articleStore.updateLike(payload);
+};
 </script>
 
 <style lang="scss" scoped></style>

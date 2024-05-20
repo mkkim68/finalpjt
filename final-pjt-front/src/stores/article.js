@@ -8,6 +8,19 @@ export const useArticleStore = defineStore("article", () => {
   const API_URL = "http://127.0.0.1:8000";
   const articles = ref([]);
 
+  const updateLike = function (payload) {
+    const { article_id, token } = payload;
+    axios({
+      method: "post",
+      url: `${API_URL}/api/articles/${article_id}/updateLike/`,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   const getArticles = function () {
     axios({
       method: "get",
@@ -80,6 +93,24 @@ export const useArticleStore = defineStore("article", () => {
       })
       .catch((err) => console.log(err));
   };
+
+  const createComment = function (id, token, content) {
+    console.log(id, token, content);
+    axios({
+      method: "post",
+      url: `${API_URL}/api/articles/${id}/comments/`,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      data: {
+        content: content,
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
   return {
     API_URL,
     articles,
@@ -87,5 +118,7 @@ export const useArticleStore = defineStore("article", () => {
     createArticle,
     updateArticle,
     deleteArticle,
+    updateLike,
+    createComment,
   };
 });

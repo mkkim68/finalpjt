@@ -79,7 +79,7 @@ def article_comments(request, article_pk):
     elif request.method == "POST":
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(article=article)
+            serializer.save(article=article, user=request.user)
             return Response(serializer.data)
 
 @api_view(['PUT', 'DELETE'])

@@ -7,17 +7,20 @@ class ArticleListSerializer(serializers.ModelSerializer):
         model = Article
         fields = ('id', 'title', 'content')
 
+class CommentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = "__all__" 
+        
 
 class ArticleSerializer(serializers.ModelSerializer):
+    comment_set = CommentListSerializer(many=True, read_only=True)
+    comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
     class Meta:
         model = Article
         fields = '__all__'
         read_only_fields = ('user', 'like_users')
 
-class CommentListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ('id', 'article', 'content')
 
 
 class CommentSerializer(serializers.ModelSerializer):
