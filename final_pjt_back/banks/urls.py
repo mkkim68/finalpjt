@@ -10,4 +10,5 @@ urlpatterns = [
     path('saving-options/', views.saving_option_list),
     path('savings/<str:fin_prdt_cd>/', views.saving_detail),
     path('exchange/', views.exchange),
+    path('api/banks/', views.bank_list, name='bank_list'),
 ]

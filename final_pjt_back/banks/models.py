@@ -54,3 +54,7 @@ class Exchange(models.Model):
     tts = models.FloatField() # 송금 보낼 때
     deal_bas_r = models.FloatField() # 매매기준율
     date = models.DateField(auto_now_add=True)
+
+# 은행
+class Bank(models.Model):
+    name = models.CharField(max_length=100)

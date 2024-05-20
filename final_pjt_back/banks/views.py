@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 import requests
 
 from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers, ExchangeSerializer
-from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange
+from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange, Bank
 import logging
 
 logger = logging.getLogger(__name__)
@@ -295,3 +295,9 @@ def exchange(request):
 
     serializer = ExchangeSerializer(exchanges, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def bank_list(request):
+    banks = Bank.objects.all()
+    bank_names = [bank.name for bank in banks]
+    return Response(bank_names)
