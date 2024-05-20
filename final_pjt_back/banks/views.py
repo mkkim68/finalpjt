@@ -9,10 +9,14 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from django.conf import settings
 from django.http import JsonResponse
 
+from datetime import datetime, timedelta
 import requests
 
-from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers
-from .models import Deposit, DepositOptions, Saving, SavingOptions
+from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers, ExchangeSerializer
+from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange
+import logging
+
+logger = logging.getLogger(__name__)
 
 BASE_URL='http://finlife.fss.or.kr/finlifeapi/'
 
@@ -238,4 +242,56 @@ def saving_detail(request, fin_prdt_cd):
         saving = Saving.objects.get(fin_prdt_cd=fin_prdt_cd)
         serializer = SavingSerializer(saving)
         return Response(serializer.data)
-    
+
+def get_previous_business_day(date):
+    while True:
+        date -= timedelta(days=1)
+        if date.weekday() < 5:  # 주말 여부 확인
+            return date
+
+@api_view(['GET'])
+def exchange(request):
+    URL = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON'
+    date = datetime.now()
+
+    if date.hour < 11:
+        date = get_previous_business_day(date)
+
+    while True:
+        current_date = date.strftime('%Y%m%d')
+        params = {
+            'authkey': settings.EXCHANGE_API_KEY,
+            'searchdate': current_date,
+            'data': 'AP01'
+        }
+        response = requests.get(URL, params=params)
+        if response.status_code == 200:
+            result = response.json()
+            if isinstance(result, list) and result:
+                exchangeList = result
+                for res in exchangeList:
+                    if Exchange.objects.filter(cur_unit=res.get('cur_unit')).exists():
+                        continue
+                    save_data = {
+                        'cur_unit': res.get('cur_unit'),
+                        'cur_nm': res.get('cur_nm'),
+                        'ttb': float(res.get('ttb').replace(',', '')),
+                        'tts': float(res.get('tts').replace(',', '')),
+                        'deal_bas_r': float(res.get('deal_bas_r').replace(',', '')),
+                    }
+                    serializer = ExchangeSerializer(data=save_data)
+                    if serializer.is_valid(raise_exception=True):
+                        serializer.save()
+                break
+            else:
+                date = get_previous_business_day(date)
+        else:
+            logger.error(f"Error fetching exchange rates: {response.status_code}")
+            return Response({"error": "Failed to fetch exchange rates."}, status=response.status_code)
+
+    exchanges = Exchange.objects.all()
+    if not exchanges.exists():
+        return Response({"message": "데이터가 존재하지 않습니다. 나중에 다시 시도해주세요."}, status=404)
+
+    serializer = ExchangeSerializer(exchanges, many=True)
+    return Response(serializer.data)

@@ -45,3 +45,12 @@ class SavingOptions(models.Model):
     intr_rate2 = models.FloatField()  # 최고 우대 금리 (소수점 2자리)
     intr_rate_type_nm = models.TextField()  # 저축 금리 유형명
     rsrv_type_nm = models.TextField()  # 적립 유형명
+
+# 환율
+class Exchange(models.Model):
+    cur_unit = models.CharField(max_length=10) # 통화코드
+    cur_nm = models.CharField(max_length=50) # 통화명
+    ttb = models.FloatField() # 송금 받을 때
+    tts = models.FloatField() # 송금 보낼 때
+    deal_bas_r = models.FloatField() # 매매기준율
+    date = models.DateField(auto_now_add=True)
