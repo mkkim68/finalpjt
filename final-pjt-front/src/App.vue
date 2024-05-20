@@ -4,22 +4,55 @@
       <div class="menu">
         <span class="logo">
           <RouterLink to="/">
-            <img class="icon logo" src="@/assets/logo.png" alt="product"></RouterLink>
+            <img class="icon logo" src="@/assets/logo.png" alt="product"
+          /></RouterLink>
         </span>
-        <RouterLink :to="{ name: 'DepositList'}">
-          <img class="icon product" src="@/assets/product.png" alt="product"><span>예적금</span></RouterLink>
-        <RouterLink :to="{ name: 'ExchangeView'}">
-          <img class="icon exchange" src="@/assets/exchange.png" alt="product"><span>환율</span></RouterLink>
-        <RouterLink :to="{ name: 'MapView'}">
-          <img class="icon map" src="@/assets/map.png" alt="product"><span>지도</span></RouterLink>
-        <RouterLink :to="{ name: 'CommunityView'}">
-          <img class="icon community" src="@/assets/community.png" alt="product"><span>게시판</span></RouterLink>
-        <RouterLink :to="{ name: 'ChartView'}">
-          <img class="icon chart" src="@/assets/chart.png" alt="product"><span>차트</span></RouterLink>
+        <RouterLink :to="{ name: 'DepositList' }">
+          <img
+            class="icon product"
+            src="@/assets/product.png"
+            alt="product"
+          /><span>예적금</span></RouterLink
+        >
+        <RouterLink :to="{ name: 'ExchangeView' }">
+          <img
+            class="icon exchange"
+            src="@/assets/exchange.png"
+            alt="product"
+          /><span>환율</span></RouterLink
+        >
+        <RouterLink :to="{ name: 'MapView' }">
+          <img class="icon map" src="@/assets/map.png" alt="product" /><span
+            >지도</span
+          ></RouterLink
+        >
+        <RouterLink :to="{ name: 'CommunityView' }">
+          <img
+            class="icon community"
+            src="@/assets/community.png"
+            alt="product"
+          /><span>게시판</span></RouterLink
+        >
+        <RouterLink :to="{ name: 'ChartView' }">
+          <img class="icon chart" src="@/assets/chart.png" alt="product" /><span
+            >차트</span
+          ></RouterLink
+        >
         <span class="user">
-          <RouterLink :to="{ name: 'SignUpView'}"><span>회원가입</span></RouterLink> |
-          <RouterLink :to="{ name: 'LogInView'}"><span>로그인</span></RouterLink>
-          <a class="hi" href=""><span>admin님 안녕하세요</span></a>
+          <RouterLink :to="{ name: 'SignUpView' }" v-if="!authStore.isLogin"
+            ><span>회원가입</span></RouterLink
+          >
+          <span v-if="!authStore.isLogin"> | </span>
+          <RouterLink :to="{ name: 'LogInView' }" v-if="!authStore.isLogin"
+            ><span>로그인</span></RouterLink
+          >
+          <a @click="authStore.logOut" v-else><span>로그아웃</span></a>
+          <RouterLink
+            :to="{ name: 'ProfileView' }"
+            v-if="authStore.isLogin"
+            class="hi"
+            ><span>admin님 안녕하세요</span></RouterLink
+          >
         </span>
       </div>
     </nav>
@@ -28,11 +61,12 @@
 </template>
 
 <script setup>
-import { RouterView, RouterLink } from 'vue-router'
+import { RouterView, RouterLink } from "vue-router";
+import { useAuthStore } from "./stores/auth";
+const authStore = useAuthStore();
 </script>
 
 <style scoped>
-
 img.logo {
   width: 80px;
 }
@@ -59,7 +93,7 @@ div.menu {
   font-family: "Jua", sans-serif;
   font-weight: 400;
   font-size: 24px;
-  font-style:normal;
+  font-style: normal;
 }
 
 div.menu > a {
@@ -81,7 +115,7 @@ div.menu > a > span {
 }
 
 div.menu > a > img {
-  padding : 0 5px;
+  padding: 0 5px;
 }
 
 span.logo {
@@ -100,28 +134,29 @@ span.user > a {
   font-size: medium;
 }
 
-a:link, a:visited {
+a:link,
+a:visited {
   text-decoration: none;
 }
 
 a:hover > span {
-  color: #13BD7E;
+  color: #13bd7e;
+  cursor: pointer;
 }
 
 a:active > span {
   font-weight: 2em;
 }
 
-
 a.hi {
   overflow: hidden;
   white-space: nowrap;
-  display : inline-block;
+  display: inline-block;
 }
 
 a.hi:hover span {
   display: inline-block;
-  font-weight : bolder;
+  font-weight: bolder;
   opacity: 1;
   animation: waveEffect 3s ease-in-out forwards;
   align-items: center;
@@ -129,21 +164,20 @@ a.hi:hover span {
 
 @keyframes waveEffect {
   0% {
-      opacity: 1;
-      color: black;
-      align-items: center;
-  
+    opacity: 1;
+    color: black;
+    align-items: center;
   }
   50% {
-      opacity: 1;
-      color: #5D87FF;
-      font-size : 1.2em;
-      align-items: center;
+    opacity: 1;
+    color: #5d87ff;
+    font-size: 1.2em;
+    align-items: center;
   }
   100% {
-      opacity: 1;
-      color: black;
-      align-items: center;
+    opacity: 1;
+    color: black;
+    align-items: center;
   }
 }
 
@@ -151,5 +185,4 @@ a.hi:hover span {
   font-weight: bold;
   color: #4caf50;
 }
-
 </style>

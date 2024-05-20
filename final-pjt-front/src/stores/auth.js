@@ -11,37 +11,20 @@ export const useAuthStore = defineStore(
     const router = useRouter();
 
     const signUp = function (payload) {
-      const {
-        username,
-        email,
-        password1,
-        password2,
-        age,
-        balance,
-        income,
-        favorite_bank,
-        invest_type,
-      } = payload;
+      const data = ref({});
+      const { username, password1 } = payload;
+      for (const item in payload) {
+        if (payload[item] !== null) {
+          data.value[item] = payload[item];
+        }
+      }
       axios({
         method: "post",
         url: `${API_URL}/accounts/signup/`,
-        data: {
-          username,
-          email,
-          password1,
-          password2,
-          age,
-          balance,
-          income,
-          favorite_bank,
-          invest_type,
-        },
+        data: data.value,
       })
         .then((res) => {
-          // console.log("회원가입이 완료되었습니다.");
-          // 회원가입 성공 후 자동으로 로그인까지 진행하기
-          const password = password1;
-          logIn({ username, password });
+          router.push({ name: "LogInView" });
         })
         .catch((err) => console.log(err));
     };
@@ -58,12 +41,26 @@ export const useAuthStore = defineStore(
         },
       })
         .then((res) => {
-          console.log("로그인이 완료되었습니다.");
-          console.log(res.data);
           token.value = res.data.key;
-          router.push({ name: "ProductView" });
+          router.push({ name: "HomeView" });
         })
         .catch((err) => console.log(err));
+    };
+
+    const logOut = function () {
+      axios({
+        method: "post",
+        url: `${API_URL}/accounts/logout/`,
+      })
+        .then((res) => {
+          router.push({ name: "LogInView" });
+          token.value = null;
+        })
+        .catch((err) => console.log(err));
+    };
+
+    const getUser = function () {
+      console.log();
     };
 
     const isLogin = computed(() => {
@@ -74,7 +71,7 @@ export const useAuthStore = defineStore(
       }
     });
 
-    return { API_URL, signUp, logIn, token, isLogin };
+    return { API_URL, signUp, logIn, token, isLogin, logOut };
   },
   { persist: true }
 );
