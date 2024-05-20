@@ -62,10 +62,17 @@ const calculateToCurrency = () => {
 };
 
 onMounted(async () => {
-  await store.getExchange();
+  try {
+    await store.getExchange();
+  } catch (error) {
+    console.error('Failed to fetch exchange rates from API. Using local data.', error);
+    await store.getLocalExchange(); // 로컬 데이터베이스에서 데이터 가져오기
+  }
   calculateToKRW(); // 데이터가 로드된 후 계산 함수 호출
   console.log("Exchanges: ", exchanges.value); // 데이터를 콘솔에 출력하여 확인
 });
+
+
 
 watch([selectedCurrency], () => {
   calculateToKRW();

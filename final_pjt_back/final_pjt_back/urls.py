@@ -22,7 +22,7 @@ from accounts import views as account_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/bank/', include('banks.urls')),
+    path('api/banks/', include('banks.urls')),
     path('api/articles/', include('articles.urls')),
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/signup/', include('dj_rest_auth.registration.urls')),

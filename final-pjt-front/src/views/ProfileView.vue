@@ -1,3 +1,4 @@
+// ProfileView.vue
 <template>
   <div v-if="info">
     <h1>{{ info.username }}'s Profile</h1>
@@ -30,27 +31,37 @@
       </ul>
     </div>
   </div>
+  <div v-else>
+    <p>로그인이 필요합니다.</p>
+  </div>
 </template>
 
 <script setup>
 import { useAuthStore } from "@/stores/auth";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
+
 const authStore = useAuthStore();
 const route = useRoute();
-const user_id = ref(route.params.user_id);
+const router = useRouter();
+const user_id = ref(route.params.user_id || authStore.info?.id);
 const info = ref(null);
 
 onMounted(() => {
-  axios({
-    method: "get",
-    url: `${authStore.API_URL}/accounts/${user_id.value}/`,
-  })
-    .then((res) => {
-      info.value = res.data;
+  if (user_id.value) {
+    axios({
+      method: "get",
+      url: `${authStore.API_URL}/accounts/${user_id.value}/`,
     })
-    .catch((err) => console.log(err));
+      .then((res) => {
+        info.value = res.data;
+      })
+      .catch((err) => console.log(err));
+  } else {
+    console.error('Missing user_id');
+    router.push('/login'); // user_id가 없는 경우 로그인 페이지로 리다이렉트
+  }
 });
 </script>
 

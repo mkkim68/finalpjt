@@ -10,20 +10,7 @@
           <select name="bank" id="bank" v-model="bank">
             <option disabled value="null">은행을 선택해주세요</option>
             <option value="all">전체</option>
-            <option value="우리은행">우리은행</option>
-            <option value="국민은행">국민은행</option>
-            <option value="신한은행">신한은행</option>
-            <option value="한국스탠다드차타드은행">한국스탠다드차타드은행</option>
-            <option value="한국씨티은행">한국씨티은행</option>
-            <option value="하나은행">하나은행</option>
-            <option value="농협은행주식회사">농협은행주식회사</option>
-            <option value="카카오뱅크">카카오뱅크</option>
-            <option value="토스뱅크">토스뱅크</option>
-            <option value="대구은행">대구은행</option>
-            <option value="부산은행">부산은행</option>
-            <option value="광주은행">광주은행</option>
-            <option value="제주은행">제주은행</option>
-            <option value="수협은행">수협은행</option>
+            <option v-for="name in sortedBankNames" :key="name" :value="name">{{ name }}</option>
           </select><br />
         </div>
         <div class="condition">
@@ -52,6 +39,7 @@
       <table>
         <thead style="text-align: center;">
           <tr>
+            <th class="plus" rowspan="2">금융상품 코드</th>
             <th class="first" rowspan="2">은행명</th>
             <th class="second" rowspan="2">상품명</th>
             <th class="third" colspan="4">금리</th>
@@ -65,6 +53,7 @@
         </thead>
         <tbody>
           <tr v-for="saving in filteredSavings" :key="saving.id">
+            <td>{{ saving.fin_prdt_cd }}</td>
             <td>{{ saving.kor_co_nm }}</td>
             <td>{{ saving.fin_prdt_nm }}</td>
             <td>{{ getInterestRate(saving, 6) }}</td>
@@ -86,10 +75,22 @@ import { useProductStore } from "@/stores/product";
 const bank = ref("all");
 const duration = ref("all");
 const filteredSavings = ref([]);
+const bankNames = ref([]);
 
 const store = useProductStore();
+
+const extractBankNames = (savings) => {
+  const names = savings.map(saving => saving.kor_co_nm);
+  return [...new Set(names)];
+};
+
+const sortedBankNames = computed(() => {
+  return bankNames.value.sort((a,b) => a.localeCompare(b))
+})
+
 onMounted(async () => {
   await store.getSavings();
+  bankNames.value = extractBankNames(store.savings);
   savingFilter();
 });
 
@@ -123,6 +124,7 @@ const getInterestRate = (saving, term) => {
   return option ? option.intr_rate : '-';
 };
 </script>
+
 
 <style scoped>
 .container2 {
@@ -173,16 +175,20 @@ th, td {
   font-size: 0.8em;
 }
 
+th.plus {
+  width: 14%;
+}
+
 th.first {
-  width: 18%;
+  width: 16%;
 }
 
 th.second {
-  width: 32%;
+  width: 25%;
 }
 
 th.third {
-  width: 20%;
+  width: 22%;
 }
 
 div.buttons {

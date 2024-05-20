@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 import requests
 
 from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers, ExchangeSerializer
-from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange, Bank
+from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange
 import logging
 
 logger = logging.getLogger(__name__)
@@ -297,7 +297,15 @@ def exchange(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def get_local_exchange(request):
+    try:
+        latest_exchange = Exchange.objects.latest('created_at')
+        serializer = ExchangeSerializer(latest_exchange)
+        return Response(serializer.data)
+    except Exchange.DoesNotExist:
+        return Response({"error": "No exchange data found"}, status=404)
+
+@api_view(['GET'])
 def bank_list(request):
-    banks = Bank.objects.all()
-    bank_names = [bank.name for bank in banks]
-    return Response(bank_names)
+    banks = Deposit.objects.values_list('kor_co_nm', flat=True).distinct()
+    return Response(banks)

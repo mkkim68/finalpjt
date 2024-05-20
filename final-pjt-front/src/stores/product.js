@@ -1,75 +1,53 @@
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useProductStore = defineStore(
-  "product",
-  () => {
-    const deposits = ref([]);
-    const savings = ref([]);
-    const API_URL = "http://127.0.0.1:8000";
-    const token = ref(null);
+export const useProductStore = defineStore("product", () => {
+  const deposits = ref([]);
+  const savings = ref([]);
+  const loadingDeposits = ref(false);
+  const loadingSavings = ref(false);
+  const API_URL = "http://127.0.0.1:8000";
 
-    const getDeposits = function () {
-      axios({
-        method: "get",
-        url: `${API_URL}/api/bank/deposits/`,
-        // headers: {
-        //   Authorization: `Token ${token.value}`,
-        // },
-      })
-        .then((response) => {
-          axios({
-            method: "get",
-            url: `${API_URL}/api/bank/deposit-options/`,
-          })
-            .then((res) => {
-              console.log(res.data);
-              for (const deposit of response.data) {
-                const option = res.data.filter(
-                  (item) => item.fin_prdt_cd === deposit.fin_prdt_cd
-                );
-                deposits.value.push({ ...deposit, options: option });
-              }
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+  const getDeposits = async () => {
+    deposits.value = []; // 초기화
+    loadingDeposits.value = true; // 로딩 상태 시작
+    try {
+      const depositResponse = await axios.get(`${API_URL}/api/banks/deposits/`);
+      const depositOptionsResponse = await axios.get(`${API_URL}/api/banks/deposit-options/`);
+      
+      for (const deposit of depositResponse.data) {
+        const options = depositOptionsResponse.data.filter(
+          (item) => item.fin_prdt_cd === deposit.fin_prdt_cd
+        );
+        deposits.value.push({ ...deposit, options });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loadingDeposits.value = false; // 로딩 상태 종료
+    }
+  };
 
-    const getSavings = function () {
-      axios({
-        method: "get",
-        url: `${API_URL}/api/bank/savings/`,
-        // headers: {
-        //   Authorization: `Token ${token.value}`,
-        // },
-      })
-        .then((response) => {
-          axios({
-            method: "get",
-            url: `${API_URL}/api/bank/saving-options/`,
-          })
-            .then((res) => {
-              console.log(res.data);
-              for (const saving of response.data) {
-                const option = res.data.filter(
-                  (item) => item.fin_prdt_cd === saving.fin_prdt_cd
-                );
-                savings.value.push({ ...saving, options: option });
-              }
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+  const getSavings = async () => {
+    savings.value = []; // 초기화
+    loadingSavings.value = true; // 로딩 상태 시작
+    try {
+      const savingResponse = await axios.get(`${API_URL}/api/banks/savings/`);
+      const savingOptionsResponse = await axios.get(`${API_URL}/api/banks/saving-options/`);
+      
+      for (const saving of savingResponse.data) {
+        const options = savingOptionsResponse.data.filter(
+          (item) => item.fin_prdt_cd === saving.fin_prdt_cd
+        );
+        savings.value.push({ ...saving, options });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loadingSavings.value = false; // 로딩 상태 종료
+    }
+  };
 
-    return { deposits, savings, API_URL, getDeposits, getSavings };
-  },
-  { persist: true }
-);
+  return { deposits, savings, loadingDeposits, loadingSavings, getDeposits, getSavings };
+}, { persist: true });

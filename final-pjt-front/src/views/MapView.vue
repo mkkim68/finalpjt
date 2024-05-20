@@ -23,9 +23,8 @@
           <div class="form-group">
             <label for="bank">은행</label>
             <select id="bank" v-model="selectedBank">
-              <option v-for="bank in banks" :key="bank" :value="bank">
-                {{ bank }}
-              </option>
+              <option value="전체">전체</option>
+              <option v-for="name in sortedBankNames" :key="name" :value="name">{{ name }}</option>
             </select>
           </div>
           <button type="submit">찾기</button>
@@ -39,11 +38,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import axios from 'axios';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useProductStore } from "@/stores/product";
 
 const kakaoMapApiKey = import.meta.env.VITE_KAKAO_MAP_API_KEY;
-console.log('사용 중인 카카오 API 키:', kakaoMapApiKey);
 
 const cities = ref([
   { name: '서울특별시', districts: ['전체', '강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'] },
@@ -57,15 +55,26 @@ const cities = ref([
 
 const banks = ref([]);
 const selectedCity = ref(cities.value[0]);
-const selectedDistrict = ref('강남구');
-const selectedBank = ref('국민은행');
+const selectedDistrict = ref('전체');
+const selectedBank = ref('전체');
+const bankNames = ref([]);
 
 let map, geocoder;
+
+const sortedBankNames = computed(() => {
+  return bankNames.value.sort((a, b) => a.localeCompare(b));
+});
+
+const store = useProductStore();
+
+const extractBankNames = (deposits) => {
+  const names = deposits.map(deposit => deposit.kor_co_nm);
+  return [...new Set(names)];
+};
 
 onMounted(async () => {
   console.log('onMounted 실행됨');
   const scriptUrl = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapApiKey}&libraries=services&autoload=false`;
-  console.log('스크립트 URL:', scriptUrl);
 
   const script = document.createElement('script');
   script.src = scriptUrl;
@@ -92,18 +101,28 @@ onMounted(async () => {
   };
   document.head.appendChild(script);
 
-  // 은행 목록 가져오기
-  try {
-    const response = await axios.get('http://localhost:8000/api/banks/');
-    banks.value = response.data;
-  } catch (error) {
-    console.error('은행 목록을 가져오는 데 실패했습니다:', error);
-  }
+  // 예금 목록 가져오기
+  await store.getDeposits();
+  bankNames.value = extractBankNames(store.deposits);
+  console.log('은행 목록 가져오기 성공:', bankNames.value);
+
+  // 기본 검색 실행
+  selectedCity.value = cities.value.find(city => city.name === '서울특별시');
+  selectedDistrict.value = '전체';
+  selectedBank.value = '전체';
+  searchBanks();
 });
 
-watch(selectedCity, () => {
+// watch selectedCity to update selectedDistrict when city changes
+watch(selectedCity, (newCity) => {
   selectedDistrict.value = '전체';
-  searchBanks();
+  searchAddress(); // 선택된 시/군/구에 따라 지도의 위치를 업데이트
+  searchBanks(); // 선택된 시/군/구와 은행에 따라 은행 목록을 검색
+});
+
+watch([selectedCity, selectedDistrict], () => {
+  searchAddress(); // 선택된 시/군/구에 따라 지도의 위치를 업데이트
+  searchBanks(); // 선택된 시/군/구와 은행에 따라 은행 목록을 검색
 });
 
 const searchAddress = () => {
@@ -125,7 +144,18 @@ const searchBanks = () => {
   if (!map) return;
 
   const places = new window.kakao.maps.services.Places();
-  const keyword = `${selectedCity.value.name} ${selectedDistrict.value} ${selectedBank.value}`;
+  let keyword = `${selectedCity.value.name}`;
+  
+  // 시/군/구가 '전체'가 아닌 경우 키워드에 추가
+  if (selectedDistrict.value !== '전체') {
+    keyword += ` ${selectedDistrict.value}`;
+  }
+  
+  // 은행이 '전체'가 아닌 경우 키워드에 추가
+  if (selectedBank.value !== '전체') {
+    keyword += ` ${selectedBank.value}`;
+  }
+  
   console.log(`검색 키워드: ${keyword}`);
 
   places.keywordSearch(keyword, (result, status) => {
@@ -146,7 +176,7 @@ const searchBanks = () => {
 
       map.setBounds(bounds);
     } else {
-      // alert('검색 결과가 없습니다.');
+      alert('검색 결과가 없습니다.');
     }
   });
 };

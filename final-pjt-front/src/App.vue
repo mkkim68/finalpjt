@@ -4,60 +4,45 @@
       <div class="menu">
         <span class="logo">
           <RouterLink to="/">
-            <img class="icon logo" src="@/assets/logo.png" alt="product"
-          /></RouterLink>
+            <img class="icon logo" src="@/assets/logo.png" alt="product" />
+          </RouterLink>
         </span>
-        <RouterLink :to="{ name: 'DepositList' }">
-          <img
-            class="icon product"
-            src="@/assets/product.png"
-            alt="product"
-          /><span>예적금</span></RouterLink
-        >
-        <RouterLink :to="{ name: 'ExchangeView' }">
-          <img
-            class="icon exchange"
-            src="@/assets/exchange.png"
-            alt="product"
-          /><span>환율</span></RouterLink
-        >
-        <RouterLink :to="{ name: 'MapView' }">
-          <img class="icon map" src="@/assets/map.png" alt="product" /><span
-            >지도</span
-          ></RouterLink
-        >
-        <RouterLink :to="{ name: 'community' }">
-          <img
-            class="icon community"
-            src="@/assets/community.png"
-            alt="product"
-          /><span>게시판</span></RouterLink
-        >
-        <RouterLink :to="{ name: 'ChartView' }">
-          <img class="icon chart" src="@/assets/chart.png" alt="product" /><span
-            >차트</span
-          ></RouterLink
-        >
+        <RouterLink :to="{ name: 'DepositList' }" active-class="active">
+          <img class="icon product" src="@/assets/product.png" alt="product" />
+          <span class="link-text">예적금</span>
+        </RouterLink>
+        <RouterLink :to="{ name: 'ExchangeView' }" active-class="active">
+          <img class="icon exchange" src="@/assets/exchange.png" alt="product" />
+          <span class="link-text">환율</span>
+        </RouterLink>
+        <RouterLink :to="{ name: 'MapView' }" active-class="active">
+          <img class="icon map" src="@/assets/map.png" alt="product" />
+          <span class="link-text">지도</span>
+        </RouterLink>
+        <RouterLink :to="{ name: 'community' }" active-class="active">
+          <img class="icon community" src="@/assets/community.png" alt="product" />
+          <span class="link-text">게시판</span>
+        </RouterLink>
+        <RouterLink :to="{ name: 'ChartView' }" active-class="active">
+          <img class="icon chart" src="@/assets/chart.png" alt="product" />
+          <span class="link-text">차트</span>
+        </RouterLink>
+
         <span class="user" v-if="!authStore.isLogin">
-          <RouterLink :to="{ name: 'SignUpView' }"
-            ><span>회원가입</span></RouterLink
-          >
+          <RouterLink :to="{ name: 'SignUpView' }">
+            <span>회원가입</span>
+          </RouterLink>
           <span> | </span>
-          <RouterLink :to="{ name: 'LogInView' }"
-            ><span>로그인</span></RouterLink
-          >
+          <RouterLink :to="{ name: 'LogInView' }">
+            <span>로그인</span>
+          </RouterLink>
         </span>
         <span class="user" v-else>
+          <RouterLink :to="{ name: 'ProfileView', params: { user_id: authStore.info?.id || 'default' } }" class="hi" v-if="authStore.info">
+            <span>{{ authStore.info.username }}님 안녕하세요</span>
+          </RouterLink>
+          <span> | </span>
           <a @click="authStore.logOut"><span>로그아웃</span></a>
-          <RouterLink
-            :to="{
-              name: 'ProfileView',
-              params: { user_id: authStore.info.id },
-            }"
-            class="hi"
-            v-if="authStore.info"
-            ><span>{{ authStore.info.username }}님 안녕하세요</span></RouterLink
-          >
         </span>
       </div>
     </nav>
@@ -66,9 +51,14 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { RouterView, RouterLink } from "vue-router";
 import { useAuthStore } from "./stores/auth";
 const authStore = useAuthStore();
+
+onMounted(() => {
+  console.log("authStore.info: ", authStore.info); // authStore.info 값을 콘솔에 출력
+});
 </script>
 
 <style scoped>
@@ -102,7 +92,6 @@ div.menu {
 }
 
 div.menu > a {
-  /* border: 1px solid black; */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -126,11 +115,6 @@ div.menu > a > img {
 span.logo {
   padding-left: 15px;
   margin-right: 30px;
-}
-
-span.user {
-  margin-left: auto;
-  width: 200px;
 }
 
 span.user > a {
@@ -189,5 +173,21 @@ a.hi:hover span {
 .active {
   font-weight: bold;
   color: #4caf50;
+}
+
+.link-text {
+  color: grey;
+}
+
+.active .link-text {
+  color: #4caf50;
+}
+
+span.user {
+  margin: 0px auto;
+  min-width: 200px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>
