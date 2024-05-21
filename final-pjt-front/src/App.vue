@@ -41,6 +41,7 @@
           <RouterLink :to="{ name: 'ProfileView', params: { user_id: authStore.info?.id || 'default' } }" class="hi" v-if="authStore.info">
             <span>{{ authStore.info.username }}님 안녕하세요</span>
           </RouterLink>
+          {{  authStore.info }}
           <span> | </span>
           <a @click="authStore.logOut"><span>로그아웃</span></a>
         </span>
@@ -184,10 +185,14 @@ a.hi:hover span {
 }
 
 span.user {
-  margin: 0px auto;
+  margin: 0px 100px 0px auto;
   min-width: 200px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+span > span {
+  margin: 0px 10px;
 }
 </style>
