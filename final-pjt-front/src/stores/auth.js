@@ -10,6 +10,7 @@ export const useAuthStore = defineStore(
     const info = ref([]);
     const API_URL = "http://127.0.0.1:8000";
     const router = useRouter();
+    const joinedProducts = ref([]);
 
     const signUp = function (payload) {
       const data = ref({});
@@ -80,8 +81,6 @@ export const useAuthStore = defineStore(
       const {
         username,
         email,
-        password1,
-        password2,
         age,
         balance,
         income,
@@ -89,15 +88,12 @@ export const useAuthStore = defineStore(
         invest_type,
         user_id,
       } = payload;
-      console.log(payload);
       axios({
         method: "put",
         url: `${API_URL}/accounts/${user_id}/update/`,
         data: {
           username: username,
           email: email,
-          password1: password1,
-          password2: password2,
           age: age,
           balance: balance,
           income: income,

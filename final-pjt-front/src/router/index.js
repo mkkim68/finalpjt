@@ -15,6 +15,8 @@ import ArticleList from "@/components/ArticleList.vue";
 import ArticleForm from "@/components/ArticleForm.vue";
 import ArticleUpdate from "@/components/ArticleUpdate.vue";
 import ProfileUpdate from "@/components/ProfileUpdate.vue";
+import DepositDetail from "@/components/DepositDetail.vue";
+import SavingsDetail from "@/components/SavingsDetail.vue";
 import { useProductStore } from "@/stores/product";
 
 const router = createRouter({
@@ -28,7 +30,7 @@ const router = createRouter({
     {
       path: "/product",
       component: ProductView,
-      redirect: "/product/deposit", // 기본적으로 DepositList로 리디렉션
+      redirect: "/product/deposit",
       children: [
         {
           path: "deposit",
@@ -41,6 +43,16 @@ const router = createRouter({
           component: SavingsList,
         },
       ],
+    },
+    {
+      path: "/deposit/:fin_prdt_cd",
+      name: "DepositDetail",
+      component: DepositDetail,
+    },
+    {
+      path: "/savings/:fin_prdt_cd",
+      name: "SavingsDetail",
+      component: SavingsDetail,
     },
     {
       path: "/exchange",

@@ -77,6 +77,7 @@ onMounted(() => {
     .then((res) => {
       article.value = res.data;
       user_id.value = res.data.user;
+      console.log(res.data);
       if (res.data.like_users.find((item) => item === authStore.info.id)) {
         isLiked.value = true;
       } else {

@@ -56,10 +56,7 @@
           >
             <span>{{ authStore.info.username }}님 안녕하세요</span>
           </RouterLink>
-<<<<<<< HEAD
-          {{ authStore.info }}
-=======
->>>>>>> be19de1f360832ddd8e7718161a9351ec714ad6c
+
           <span> | </span>
           <a @click="authStore.logOut"><span>로그아웃</span></a>
         </span>
@@ -67,16 +64,142 @@
     </nav>
   </header>
   <RouterView />
+
+  <!-- Chatbot icon -->
+  <div id="chatbot-icon" @click="toggleChat">💬</div>
+
+  <!-- Chatbot window -->
+  <div id="chatbot-window" :class="{ hidden: !chatVisible }">
+    <div id="chatbot-header">
+      <span>Hi Chatbot</span>
+      <button @click="toggleChat">X</button>
+    </div>
+    <div id="chatbot-messages">
+      <div v-for="message in messages" :key="message.id" :class="message.type">
+        {{ message.text }}
+      </div>
+    </div>
+    <div id="chatbot-input">
+      <input
+        id="chat-input"
+        type="text"
+        v-model="userInput"
+        placeholder="메시지를 입력하세요..."
+        @keyup.enter="sendMessageWithRateLimit"
+      />
+      <button @click="sendMessageWithRateLimit">전송</button>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { RouterView, RouterLink } from "vue-router";
-import { useAuthStore } from "./stores/auth";
+import { ref, onMounted, nextTick } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import axios from "axios";
+
 const authStore = useAuthStore();
 
+const chatVisible = ref(false);
+const messages = ref([]);
+const userInput = ref("");
+const isSendingMessage = ref(false);
+let lastRequestTime = 0;
+
+const toggleChat = () => {
+  chatVisible.value = !chatVisible.value;
+};
+
+const scrollToBottom = () => {
+  const messagesContainer = document.getElementById("chatbot-messages");
+  if (messagesContainer) {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+};
+
+const sendMessage = async () => {
+  if (userInput.value.trim() === "") return;
+  if (isSendingMessage.value) {
+    console.log("A message is already being sent, please wait.");
+    return;
+  }
+
+  isSendingMessage.value = true;
+
+  const userMessage = {
+    id: Date.now(),
+    text: userInput.value,
+    type: "input",
+  };
+  messages.value.push(userMessage);
+
+  nextTick(scrollToBottom);
+
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: userInput.value }],
+        max_tokens: 150,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const botMessage = {
+      id: Date.now() + 1,
+      text: response.data.choices[0].message.content.trim(),
+      type: "bot",
+    };
+    messages.value.push(botMessage);
+    nextTick(scrollToBottom);
+  } catch (error) {
+    const errorMessage = {
+      id: Date.now() + 2,
+      text:
+        error.response?.status === 429
+          ? "Error: Too many requests. Please wait a few seconds before trying again."
+          : "Error: Could not get response from the chatbot.",
+      type: "error",
+    };
+    messages.value.push(errorMessage);
+    nextTick(scrollToBottom);
+
+    if (error.response?.status === 429) {
+      lastRequestTime = Date.now();
+    }
+  }
+
+  userInput.value = "";
+  isSendingMessage.value = false;
+};
+
+const REQUEST_INTERVAL = 5000; // 5초 간격
+
+const sendMessageWithRateLimit = () => {
+  const now = Date.now();
+  if (now - lastRequestTime > REQUEST_INTERVAL) {
+    lastRequestTime = now;
+    sendMessage();
+  } else {
+    const errorMessage = {
+      id: Date.now(),
+      text: `Too many requests. Please wait ${Math.ceil(
+        (REQUEST_INTERVAL - (now - lastRequestTime)) / 1000
+      )} seconds before trying again.`,
+      type: "error",
+    };
+    messages.value.push(errorMessage);
+    nextTick(scrollToBottom);
+  }
+};
+
 onMounted(() => {
-  // console.log("authStore.info: ", authStore.info); // authStore.info 값을 콘솔에 출력
+  nextTick(scrollToBottom);
 });
 </script>
 
@@ -212,5 +335,100 @@ span.user {
 
 span > span {
   margin: 0px 10px;
+}
+
+/* 챗봇 */
+/* styles.css */
+#chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  padding: 15px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#chatbot-window {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+#chatbot-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#chatbot-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  background-color: #e1ffc7;
+  align-self: flex-end;
+  text-align: right;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  max-width: 80%;
+}
+
+.bot {
+  background-color: #f1f1f1;
+  align-self: flex-start;
+  text-align: left;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  max-width: 80%;
+}
+
+#chatbot-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+#chatbot-input input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+}
+
+#chatbot-input button {
+  border: none;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
 }
 </style>

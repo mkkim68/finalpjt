@@ -25,31 +25,6 @@
         </tr>
         <tr>
           <th>
-            <span class="important">* </span>
-            <label for="password1">비밀번호</label>
-          </th>
-          <td>
-            <input
-              type="password"
-              id="password1"
-              v-model.trim="password1"
-            /><br />
-            <span style="font-size: 0.7em"
-              >※ 대문자, 숫자, "~!@#()_|. 특수기호를 포함한 3~5자</span
-            >
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <span class="important">* </span>
-            <label for="password2">비밀번호 확인</label>
-          </th>
-          <td>
-            <input type="password" id="password2" v-model.trim="password2" />
-          </td>
-        </tr>
-        <tr>
-          <th>
             <label for="age">나이</label>
           </th>
           <td>
@@ -129,8 +104,6 @@ const authStore = useAuthStore();
 
 const username = ref(null);
 const email = ref(null);
-const password1 = ref(null);
-const password2 = ref(null);
 const age = ref(null);
 const balance = ref(null);
 const income = ref(null);
@@ -148,8 +121,6 @@ onMounted(() => {
     .then((res) => {
       username.value = res.data.username;
       email.value = res.data.email;
-      password1.value = res.data.password1;
-      password2.value = res.data.password2;
       age.value = res.data.age;
       balance.value = res.data.balance;
       income.value = res.data.income;
@@ -163,8 +134,6 @@ const userUpdate = function () {
   const payload = {
     username: username.value,
     email: email.value,
-    password1: password1.value,
-    password2: password2.value,
     age: age.value,
     balance: balance.value,
     income: income.value,

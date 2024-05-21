@@ -28,3 +28,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = '__all__'
         read_only_fields=['deposit', 'saving']
+

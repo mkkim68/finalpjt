@@ -22,7 +22,7 @@
     <div>
       <h4>가입 중인 예금</h4>
       <ul>
-        <li v-for="deposit in info.deposit" :key="deposit.fin_prdt_cd">
+        <li v-for="deposit in deposits" :key="deposit.id">
           {{ deposit.fin_prdt_nm }}
         </li>
       </ul>
@@ -30,7 +30,7 @@
     <div>
       <h4>가입 중인 적금</h4>
       <ul>
-        <li v-for="saving in info.saving" :key="saving.fin_prdt_cd">
+        <li v-for="saving in savings" :key="saving.fin_prdt_cd">
           {{ saving.fin_prdt_nm }}
         </li>
       </ul>
@@ -44,15 +44,19 @@
 
 <script setup>
 import { useAuthStore } from "@/stores/auth";
+import { useProductStore } from "@/stores/product";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter, RouterLink, RouterView } from "vue-router";
 import axios from "axios";
 
 const authStore = useAuthStore();
+const productStore = useProductStore();
 const route = useRoute();
 const router = useRouter();
 const user_id = ref(route.params.user_id || authStore.info?.id);
 const info = ref(null);
+const deposits = ref([]);
+const savings = ref([]);
 
 onMounted(() => {
   if (user_id.value) {
@@ -62,6 +66,12 @@ onMounted(() => {
     })
       .then((res) => {
         info.value = res.data;
+        for (const item of res.data.deposit) {
+          deposits.value.push(productStore.deposits.find((d) => d.id == item));
+        }
+        for (const item of res.data.saving) {
+          savings.value.push(productStore.savings.find((s) => s.id == item));
+        }
       })
       .catch((err) => console.log(err));
   } else {

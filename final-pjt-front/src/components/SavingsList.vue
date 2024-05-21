@@ -10,8 +10,10 @@
           <select name="bank" id="bank" v-model="bank">
             <option disabled value="null">은행을 선택해주세요</option>
             <option value="all">전체</option>
-            <option v-for="name in sortedBankNames" :key="name" :value="name">{{ name }}</option>
-          </select><br />
+            <option v-for="name in sortedBankNames" :key="name" :value="name">
+              {{ name }}
+            </option></select
+          ><br />
         </div>
         <div class="condition">
           <label for="duration">예치기간</label><br />
@@ -37,7 +39,7 @@
     <div class="table-section">
       <h3>정기 적금</h3>
       <table>
-        <thead style="text-align: center;">
+        <thead style="text-align: center">
           <tr>
             <th class="plus" rowspan="2">금융상품 코드</th>
             <th class="first" rowspan="2">은행명</th>
@@ -55,7 +57,15 @@
           <tr v-for="saving in filteredSavings" :key="saving.id">
             <td>{{ saving.fin_prdt_cd }}</td>
             <td>{{ saving.kor_co_nm }}</td>
-            <td>{{ saving.fin_prdt_nm }}</td>
+            <td>
+              <RouterLink
+                :to="{
+                  name: 'SavingsDetail',
+                  params: { fin_prdt_cd: saving.fin_prdt_cd },
+                }"
+                >{{ saving.fin_prdt_nm }}</RouterLink
+              >
+            </td>
             <td>{{ getInterestRate(saving, 6) }}</td>
             <td>{{ getInterestRate(saving, 12) }}</td>
             <td>{{ getInterestRate(saving, 24) }}</td>
@@ -63,12 +73,12 @@
           </tr>
         </tbody>
       </table>
-
     </div>
   </div>
 </template>
 
 <script setup>
+import { RouterLink } from "vue-router";
 import { onMounted, ref, computed } from "vue";
 import { useProductStore } from "@/stores/product";
 
@@ -80,13 +90,13 @@ const bankNames = ref([]);
 const store = useProductStore();
 
 const extractBankNames = (savings) => {
-  const names = savings.map(saving => saving.kor_co_nm);
+  const names = savings.map((saving) => saving.kor_co_nm);
   return [...new Set(names)];
 };
 
 const sortedBankNames = computed(() => {
-  return bankNames.value.sort((a,b) => a.localeCompare(b))
-})
+  return bankNames.value.sort((a, b) => a.localeCompare(b));
+});
 
 onMounted(async () => {
   await store.getSavings();
@@ -99,19 +109,25 @@ const savings = computed(() => store.savings);
 const savingFilter = () => {
   let filtered = savings.value;
 
-  if (bank.value !== 'all') {
-    filtered = filtered.filter(saving => saving.kor_co_nm === bank.value);
+  if (bank.value !== "all") {
+    filtered = filtered.filter((saving) => saving.kor_co_nm === bank.value);
   }
 
-  if (duration.value !== 'all') {
+  if (duration.value !== "all") {
     const durationNum = Number(duration.value);
-    filtered = filtered.map(saving => {
-      const filteredOptions = saving.options.filter(option => Number(option.save_trm) === durationNum);
-      return { ...saving, options: filteredOptions };
-    }).filter(saving => saving.options.length > 0);
+    filtered = filtered
+      .map((saving) => {
+        const filteredOptions = saving.options.filter(
+          (option) => Number(option.save_trm) === durationNum
+        );
+        return { ...saving, options: filteredOptions };
+      })
+      .filter((saving) => saving.options.length > 0);
   } else {
-    filtered = filtered.map(saving => {
-      const filteredOptions = saving.options.filter(option => [6, 12, 24, 36].includes(Number(option.save_trm)));
+    filtered = filtered.map((saving) => {
+      const filteredOptions = saving.options.filter((option) =>
+        [6, 12, 24, 36].includes(Number(option.save_trm))
+      );
       return { ...saving, options: filteredOptions };
     });
   }
@@ -120,11 +136,12 @@ const savingFilter = () => {
 };
 
 const getInterestRate = (saving, term) => {
-  const option = saving.options.find(option => Number(option.save_trm) === term);
-  return option ? option.intr_rate : '-';
+  const option = saving.options.find(
+    (option) => Number(option.save_trm) === term
+  );
+  return option ? (option.intr_rate !== 999 ? option.intr_rate : "-") : "-";
 };
 </script>
-
 
 <style scoped>
 .container2 {
@@ -169,7 +186,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ccc;
   padding: 10px;
   font-size: 0.8em;
@@ -192,9 +210,9 @@ th.third {
 }
 
 div.buttons {
-	display: flex;
+  display: flex;
   flex-direction: column;
-	align-items: center;
+  align-items: center;
 }
 
 div.buttons > input {
@@ -207,5 +225,4 @@ div.buttons > input {
   width: 80px;
   margin-top: 20px;
 }
-
 </style>
