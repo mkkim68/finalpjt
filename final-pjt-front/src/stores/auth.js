@@ -76,7 +76,45 @@ export const useAuthStore = defineStore(
       }
     });
 
-    return { API_URL, signUp, logIn, token, isLogin, logOut, info };
+    const userUpdate = function (payload) {
+      const {
+        username,
+        email,
+        password1,
+        password2,
+        age,
+        balance,
+        income,
+        favorite_bank,
+        invest_type,
+        user_id,
+      } = payload;
+      console.log(payload);
+      axios({
+        method: "put",
+        url: `${API_URL}/accounts/${user_id}/update/`,
+        data: {
+          username: username,
+          email: email,
+          password1: password1,
+          password2: password2,
+          age: age,
+          balance: balance,
+          income: income,
+          favorite_bank: favorite_bank,
+          invest_type: invest_type,
+        },
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
+      })
+        .then((res) => {
+          router.push({ name: "ProfileView", params: { user_id: user_id } });
+        })
+        .catch((err) => console.log(err));
+    };
+
+    return { API_URL, signUp, logIn, token, isLogin, logOut, info, userUpdate };
   },
   { persist: true }
 );

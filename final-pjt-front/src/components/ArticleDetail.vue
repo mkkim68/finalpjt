@@ -4,9 +4,10 @@
     <p>
       작성자:
       <RouterLink :to="{ name: 'ProfileView', params: { user_id: user_id } }">{{
-        article.user
+        author
       }}</RouterLink>
     </p>
+    <p>작성 시간: {{ article.created_at }}</p>
     <p>{{ article.content }}</p>
     <div v-if="authStore.info.id === article.user">
       <RouterLink
@@ -18,18 +19,27 @@
       </button>
     </div>
     <div>
-      <button @click="like">좋아요</button>
+      <button @click="like">{{ isLiked ? "좋아요 취소" : "좋아요" }}</button>
     </div>
     <div>
       <h3>댓글 {{ article.comment_count }}개</h3>
-      <CommentForm :article_id="id" />
-      <p v-for="comment in article.comment_set">{{ comment.content }}</p>
+      <div>
+        <form @submit.prevent="createComment">
+          <label for="content">댓글 작성</label>
+          <input id="content" type="text" v-model.trim="content" />
+          <input type="submit" value="확인" />
+        </form>
+      </div>
+      <ul ref="comments">
+        <li v-for="comment in article.comment_set" :key="comment.id">
+          {{ comment.content }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script setup>
-import CommentForm from "./CommentForm.vue";
 import { useRoute, RouterLink } from "vue-router";
 import { ref, onMounted } from "vue";
 import { useArticleStore } from "@/stores/article";
@@ -43,6 +53,18 @@ const id = ref(route.params.article_id);
 const article = ref(null);
 const author = ref(null);
 const user_id = ref(null);
+const content = ref(null);
+const isLiked = ref(null);
+
+const comments = ref(null);
+
+const createComment = function () {
+  articleStore.createComment(id.value, authStore.token, content.value);
+  const liTag = document.createElement("li");
+  liTag.innerText = content.value;
+  comments.value.appendChild(liTag);
+  content.value = null;
+};
 
 onMounted(() => {
   axios({
@@ -55,6 +77,11 @@ onMounted(() => {
     .then((res) => {
       article.value = res.data;
       user_id.value = res.data.user;
+      if (res.data.like_users.find((item) => item === authStore.info.id)) {
+        isLiked.value = true;
+      } else {
+        isLiked.value = false;
+      }
       axios({
         method: "get",
         url: `${authStore.API_URL}/accounts/${user_id.value}/`,
@@ -68,6 +95,7 @@ onMounted(() => {
 });
 
 const like = function () {
+  isLiked.value = !isLiked.value;
   const payload = {
     article_id: id.value,
     token: authStore.token,

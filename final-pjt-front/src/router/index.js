@@ -14,6 +14,7 @@ import ArticleDetail from "@/components/ArticleDetail.vue";
 import ArticleList from "@/components/ArticleList.vue";
 import ArticleForm from "@/components/ArticleForm.vue";
 import ArticleUpdate from "@/components/ArticleUpdate.vue";
+import ProfileUpdate from "@/components/ProfileUpdate.vue";
 import { useProductStore } from "@/stores/product";
 
 const router = createRouter({
@@ -96,8 +97,18 @@ const router = createRouter({
     },
     {
       path: "/profile/:user_id",
-      name: "ProfileView",
-      component: ProfileView,
+      children: [
+        {
+          path: "",
+          name: "ProfileView",
+          component: ProfileView,
+        },
+        {
+          path: "update",
+          name: "ProfileUpdate",
+          component: ProfileUpdate,
+        },
+      ],
     },
   ],
 });
