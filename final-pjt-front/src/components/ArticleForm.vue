@@ -33,7 +33,6 @@ const authStore = useAuthStore();
 const title = ref(null);
 const content = ref(null);
 const router = useRouter();
-console.log(authStore.isLogin);
 onMounted(() => {
   if (!authStore.isLogin) {
     alert("로그인을 해주세요.");

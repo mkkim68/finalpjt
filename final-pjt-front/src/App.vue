@@ -56,7 +56,10 @@
           >
             <span>{{ authStore.info.username }}님 안녕하세요</span>
           </RouterLink>
+<<<<<<< HEAD
           {{ authStore.info }}
+=======
+>>>>>>> be19de1f360832ddd8e7718161a9351ec714ad6c
           <span> | </span>
           <a @click="authStore.logOut"><span>로그아웃</span></a>
         </span>
@@ -73,7 +76,7 @@ import { useAuthStore } from "./stores/auth";
 const authStore = useAuthStore();
 
 onMounted(() => {
-  console.log("authStore.info: ", authStore.info); // authStore.info 값을 콘솔에 출력
+  // console.log("authStore.info: ", authStore.info); // authStore.info 값을 콘솔에 출력
 });
 </script>
 

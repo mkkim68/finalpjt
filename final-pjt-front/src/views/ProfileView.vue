@@ -1,7 +1,12 @@
 // ProfileView.vue
 <template>
-  <div v-if="info">
+  <div v-if="info" class="container">
     <h1>{{ info.username }}'s Profile</h1>
+    <RouterLink
+      v-if="Number(authStore.info.id) === Number(user_id)"
+      :to="{ name: 'ProfileUpdate' }"
+      >개인정보 수정</RouterLink
+    >
     <div>
       <p>email: {{ info.email ? info.email : "미기입" }}</p>
       <p>age: {{ info.age ? info.age : "미기입" }}</p>
@@ -34,12 +39,13 @@
   <div v-else>
     <p>로그인이 필요합니다.</p>
   </div>
+  <RouterView />
 </template>
 
 <script setup>
 import { useAuthStore } from "@/stores/auth";
 import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, RouterLink, RouterView } from "vue-router";
 import axios from "axios";
 
 const authStore = useAuthStore();
@@ -59,8 +65,8 @@ onMounted(() => {
       })
       .catch((err) => console.log(err));
   } else {
-    console.error('Missing user_id');
-    router.push('/login'); // user_id가 없는 경우 로그인 페이지로 리다이렉트
+    console.error("Missing user_id");
+    router.push("/login"); // user_id가 없는 경우 로그인 페이지로 리다이렉트
   }
 });
 </script>
