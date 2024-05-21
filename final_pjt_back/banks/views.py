@@ -163,7 +163,6 @@ def saving_option_list(request):
         options = SavingOptions.objects.all()
         seriarlizer = SavingOptionsSerializers(options, many=True)
         return Response(seriarlizer.data)
-    
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -180,6 +179,16 @@ def saving_detail_option(request, fin_prdt_cd):
         options = SavingOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
         serializer = SavingOptionsSerializers(options, many=True)
         return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) 
+def saving_detail_join(request, fin_prdt_cd):
+    user = User.objects.get(username=request.user)
+    saving = Saving.objects.get(fin_prdt_cd=fin_prdt_cd)
+    if request.method == "POST":
+        user.saving.add(saving)
+        my_dict = {'isJoined': True}
+        return Response(my_dict)
 
 def get_previous_business_day(date):
     while True:
