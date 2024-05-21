@@ -28,4 +28,5 @@ urlpatterns = [
     path('accounts/signup/', include('dj_rest_auth.registration.urls')),
     path('accounts/<int:user_id>/', account_views.get_user_by_id ),
     path('accounts/<str:username>/', account_views.get_user_by_username ),
+    path('accounts/<str:user_id>/update/', account_views.user_update ),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

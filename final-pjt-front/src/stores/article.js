@@ -12,12 +12,14 @@ export const useArticleStore = defineStore("article", () => {
     const { article_id, token } = payload;
     axios({
       method: "post",
-      url: `${API_URL}/api/articles/${article_id}/updateLike/`,
+      url: `${API_URL}/api/articles/${article_id}/likes/`,
       headers: {
         Authorization: `Token ${token}`,
       },
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        // console.log(res.data);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -95,7 +97,7 @@ export const useArticleStore = defineStore("article", () => {
   };
 
   const createComment = function (id, token, content) {
-    console.log(id, token, content);
+    // console.log(id, token, content);
     axios({
       method: "post",
       url: `${API_URL}/api/articles/${id}/comments/`,
@@ -107,7 +109,7 @@ export const useArticleStore = defineStore("article", () => {
       },
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => console.log(err));
   };

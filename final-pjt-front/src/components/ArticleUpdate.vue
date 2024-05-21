@@ -17,7 +17,7 @@
         placeholder="내용을 입력해주세요."
       />
       <br />
-      <input type="submit" value="확인~~" />
+      <input type="submit" value="수정하기" />
     </form>
   </div>
 </template>

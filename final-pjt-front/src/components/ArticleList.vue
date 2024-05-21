@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Article List</h1>
     <div>
       <p v-for="article in articleStore.articles" :key="article.pk">
