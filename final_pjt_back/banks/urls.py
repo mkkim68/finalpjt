@@ -17,7 +17,7 @@ urlpatterns = [
     path('savings/<str:fin_prdt_cd>/join/', views.saving_detail_join),
 
     #환율
-    path('exchange/', views.exchange),
+    path('exchange/', views.exchange, name="exchange"),
     path('local/exchange/', views.get_local_exchange, name='get_local_exchange'),
     #지도
     path('banks/', views.bank_list),

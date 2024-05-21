@@ -225,6 +225,8 @@ def exchange(request):
                         'ttb': float(res.get('ttb').replace(',', '')),
                         'tts': float(res.get('tts').replace(',', '')),
                         'deal_bas_r': float(res.get('deal_bas_r').replace(',', '')),
+                        'bkpr': float(res.get('bkpr').replace(',', '')),
+                        'kftc_deal_bas_r': float(res.get('kftc_deal_bas_r').replace(',', '')),
                     }
                     serializer = ExchangeSerializer(data=save_data)
                     if serializer.is_valid(raise_exception=True):
@@ -243,6 +245,7 @@ def exchange(request):
     serializer = ExchangeSerializer(exchanges, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def get_local_exchange(request):
     try:
@@ -251,6 +254,7 @@ def get_local_exchange(request):
         return Response(serializer.data)
     except Exchange.DoesNotExist:
         return Response({"error": "No exchange data found"}, status=404)
+
 
 @api_view(['GET'])
 def bank_list(request):

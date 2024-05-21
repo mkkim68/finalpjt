@@ -53,4 +53,10 @@ class Exchange(models.Model):
     ttb = models.FloatField() # 송금 받을 때
     tts = models.FloatField() # 송금 보낼 때
     deal_bas_r = models.FloatField() # 매매기준율
+    bkpr = models.FloatField() # 장부가격
+    yy_efee_r = models.FloatField() # 년환가료율
+    ten_dd_efee_r = models.FloatField() # 10일환가료율
+    kftc_deal_bas_r = models.FloatField() # 서울외국환중개 매매기준율
+    kftc_bkpr = models.FloatField(default=0.0) # 서울외국환중개 장부가
     date = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
