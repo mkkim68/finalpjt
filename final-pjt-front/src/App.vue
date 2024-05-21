@@ -357,7 +357,7 @@ span > span {
   bottom: 80px;
   right: 20px;
   width: 300px;
-  height: 400px;
+  height: 55%;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -365,6 +365,7 @@ span > span {
   display: flex;
   flex-direction: column;
   z-index: 1000;
+  opacity: 0.85;
 }
 
 #chatbot-header {
