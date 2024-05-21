@@ -56,7 +56,7 @@
           >
             <span>{{ authStore.info.username }}님 안녕하세요</span>
           </RouterLink>
-          {{  authStore.info }}
+          {{ authStore.info }}
           <span> | </span>
           <a @click="authStore.logOut"><span>로그아웃</span></a>
         </span>
