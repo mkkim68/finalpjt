@@ -14,6 +14,8 @@ urlpatterns = [
     path('saving-options/', views.saving_option_list),
     path('savings/<str:fin_prdt_cd>/', views.saving_detail),
     path('savings/<str:fin_prdt_cd>/option/', views.saving_detail_option),
+    path('savings/<str:fin_prdt_cd>/join/', views.saving_detail_join),
+
     #환율
     path('exchange/', views.exchange),
     path('local/exchange/', views.get_local_exchange, name='get_local_exchange'),

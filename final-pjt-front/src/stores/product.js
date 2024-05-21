@@ -68,6 +68,18 @@ export const useProductStore = defineStore(
         .then((res) => {})
         .catch((err) => console.log(err));
     };
+    const joinSaving = function (payload) {
+      const { fin_prdt_cd, token } = payload;
+      axios({
+        method: "post",
+        url: `${API_URL}/api/banks/savings/${fin_prdt_cd}/join/`,
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => console.log(err));
+    };
 
     return {
       deposits,
@@ -77,6 +89,7 @@ export const useProductStore = defineStore(
       getDeposits,
       getSavings,
       joinDeposit,
+      joinSaving,
     };
   },
   { persist: true }

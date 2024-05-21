@@ -10,7 +10,6 @@ export const useAuthStore = defineStore(
     const info = ref([]);
     const API_URL = "http://127.0.0.1:8000";
     const router = useRouter();
-    const joinedProducts = ref([]);
 
     const signUp = function (payload) {
       const data = ref({});
@@ -110,7 +109,28 @@ export const useAuthStore = defineStore(
         .catch((err) => console.log(err));
     };
 
-    return { API_URL, signUp, logIn, token, isLogin, logOut, info, userUpdate };
+    const getUserInfo = function (user_id) {
+      axios({
+        method: "get",
+        url: `${API_URL}/accounts/${user_id}/`,
+      })
+        .then((res) => {
+          info.value = res.data;
+        })
+        .catch((err) => console.log(err));
+    };
+
+    return {
+      API_URL,
+      signUp,
+      logIn,
+      token,
+      isLogin,
+      logOut,
+      info,
+      userUpdate,
+      getUserInfo,
+    };
   },
   { persist: true }
 );

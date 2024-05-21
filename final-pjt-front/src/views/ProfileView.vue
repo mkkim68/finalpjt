@@ -20,7 +20,7 @@
       </p>
     </div>
     <div>
-      <h4>가입 중인 예금</h4>
+      <h4>가입 중인 예금 상품</h4>
       <ul>
         <li v-for="deposit in deposits" :key="deposit.id">
           {{ deposit.fin_prdt_nm }}
@@ -28,7 +28,7 @@
       </ul>
     </div>
     <div>
-      <h4>가입 중인 적금</h4>
+      <h4>가입 중인 적금 상품</h4>
       <ul>
         <li v-for="saving in savings" :key="saving.fin_prdt_cd">
           {{ saving.fin_prdt_nm }}

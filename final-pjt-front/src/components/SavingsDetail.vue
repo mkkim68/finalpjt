@@ -1,7 +1,15 @@
 <template>
   <div class="container">
-    <h1>{{ saving.fin_prdt_nm }}</h1>
-    <h5>{{ saving.kor_co_nm }}</h5>
+    <h1 style="display: flex; align-items: center">
+      {{ saving.fin_prdt_nm }}
+      <button class="btn btn-primary" @click="join" v-if="!isJoined">
+        가입하기
+      </button>
+      <button disabled class="btn btn-secondary" @click="join" v-else>
+        가입 중
+      </button>
+    </h1>
+    <p>{{ saving.kor_co_nm }}</p>
     <div>
       <p>가입 대상: {{ saving.join_member }}</p>
       <p>가입 방법: {{ saving.join_way }}</p>
@@ -52,10 +60,12 @@
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useProductStore } from "@/stores/product";
 import axios from "axios";
 
 const route = useRoute();
 const authStore = useAuthStore();
+const productStore = useProductStore();
 
 const fin_prdt_cd = ref(route.params.fin_prdt_cd);
 const API_URL = "http://127.0.0.1:8000";
@@ -63,6 +73,7 @@ const API_URL = "http://127.0.0.1:8000";
 const saving = ref([]);
 const join_deny = ref(null);
 const options = ref([]);
+const isJoined = ref(false);
 
 onMounted(() => {
   axios({
@@ -81,6 +92,7 @@ onMounted(() => {
       } else if (res.data.join_deny === 3) {
         join_deny.value = "일부제한";
       }
+      authStore.getUserInfo(authStore.info.id);
       axios({
         method: "get",
         url: `${API_URL}/api/banks/savings/${fin_prdt_cd.value}/option/`,
@@ -89,16 +101,39 @@ onMounted(() => {
         },
       })
         .then((res) => {
-          console.log(res.data);
           options.value = res.data;
+        })
+        .then(() => {
+          if (authStore.info.saving.find((item) => item == res.data.id)) {
+            isJoined.value = true;
+          }
         })
         .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 });
+
+const join = function () {
+  const payload = {
+    fin_prdt_cd: saving.value.fin_prdt_cd,
+    token: authStore.token,
+  };
+  productStore.joinSaving(payload);
+  isJoined.value = true;
+};
 </script>
 
 <style scoped>
+button {
+  margin-left: 10px;
+}
+.btn-primary {
+  background-color: rgb(134, 186, 255);
+  border: none;
+}
+.btn-primary:hover {
+  background-color: rgb(83, 157, 255);
+}
 .table-section {
   margin-top: 2px;
   padding: 20px;

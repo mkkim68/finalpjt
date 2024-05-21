@@ -2,7 +2,12 @@
   <div class="container">
     <h1 style="display: flex; align-items: center">
       {{ deposit.fin_prdt_nm }}
-      <button class="btn btn-primary" @click="join">가입하기</button>
+      <button class="btn btn-primary" @click="join" v-if="!isJoined">
+        가입하기
+      </button>
+      <button disabled class="btn btn-secondary" @click="join" v-else>
+        가입 중
+      </button>
     </h1>
     <p>{{ deposit.kor_co_nm }}</p>
     <div id="product-info">
@@ -83,7 +88,7 @@ const API_URL = "http://127.0.0.1:8000";
 const deposit = ref([]);
 const join_deny = ref(null);
 const options = ref([]);
-const isJoined = ref(null);
+const isJoined = ref(false);
 
 onMounted(() => {
   axios({
@@ -95,7 +100,6 @@ onMounted(() => {
   })
     .then((res) => {
       deposit.value = res.data;
-      console.log(res.data);
       if (res.data.join_deny === 1) {
         join_deny.value = "없음";
       } else if (res.data.join_deny === 2) {
@@ -103,6 +107,7 @@ onMounted(() => {
       } else if (res.data.join_deny === 3) {
         join_deny.value = "일부제한";
       }
+      authStore.getUserInfo(authStore.info.id);
       axios({
         method: "get",
         url: `${API_URL}/api/banks/deposits/${fin_prdt_cd.value}/option/`,
@@ -112,6 +117,11 @@ onMounted(() => {
       })
         .then((res) => {
           options.value = res.data;
+        })
+        .then(() => {
+          if (authStore.info.deposit.find((item) => item == res.data.id)) {
+            isJoined.value = true;
+          }
         })
         .catch((err) => console.log(err));
     })
@@ -124,16 +134,19 @@ const join = function () {
     token: authStore.token,
   };
   productStore.joinDeposit(payload);
+  isJoined.value = true;
 };
 </script>
 
 <style scoped>
 button {
-  background-color: rgb(134, 186, 255);
-  border: none;
   margin-left: 10px;
 }
-button:hover {
+.btn-primary {
+  background-color: rgb(134, 186, 255);
+  border: none;
+}
+.btn-primary:hover {
   background-color: rgb(83, 157, 255);
 }
 .table-section {
