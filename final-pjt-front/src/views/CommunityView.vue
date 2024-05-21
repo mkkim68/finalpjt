@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <h1>Community Page</h1>
-    <RouterLink :to="{ name: 'community-create' }">새 글 작성</RouterLink>
+    <RouterLink :to="{ name: 'community-create' }" v-if="authStore.isLogin"
+      >새 글 작성</RouterLink
+    >
     <RouterLink :to="{ name: 'community' }">게시판</RouterLink>
   </div>
   <RouterView />
@@ -10,8 +12,9 @@
 <script setup>
 import { onMounted } from "vue";
 import { RouterLink, RouterView } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
-onMounted(() => {});
+const authStore = useAuthStore();
 </script>
 
 <style scoped>

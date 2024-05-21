@@ -25,12 +25,21 @@
 <script setup>
 import { useArticleStore } from "@/stores/article";
 import { useAuthStore } from "@/stores/auth";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const articleStore = useArticleStore();
 const authStore = useAuthStore();
 const title = ref(null);
 const content = ref(null);
+const router = useRouter();
+console.log(authStore.isLogin);
+onMounted(() => {
+  if (!authStore.isLogin) {
+    alert("로그인을 해주세요.");
+    router.push({ name: "LogInView" });
+  }
+});
 
 const create = function () {
   const payload = {

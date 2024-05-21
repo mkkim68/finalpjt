@@ -12,7 +12,11 @@
           <span class="link-text">예적금</span>
         </RouterLink>
         <RouterLink :to="{ name: 'ExchangeView' }" active-class="active">
-          <img class="icon exchange" src="@/assets/exchange.png" alt="product" />
+          <img
+            class="icon exchange"
+            src="@/assets/exchange.png"
+            alt="product"
+          />
           <span class="link-text">환율</span>
         </RouterLink>
         <RouterLink :to="{ name: 'MapView' }" active-class="active">
@@ -20,7 +24,11 @@
           <span class="link-text">지도</span>
         </RouterLink>
         <RouterLink :to="{ name: 'community' }" active-class="active">
-          <img class="icon community" src="@/assets/community.png" alt="product" />
+          <img
+            class="icon community"
+            src="@/assets/community.png"
+            alt="product"
+          />
           <span class="link-text">게시판</span>
         </RouterLink>
         <RouterLink :to="{ name: 'ChartView' }" active-class="active">
@@ -38,7 +46,14 @@
           </RouterLink>
         </span>
         <span class="user" v-else>
-          <RouterLink :to="{ name: 'ProfileView', params: { user_id: authStore.info?.id || 'default' } }" class="hi" v-if="authStore.info">
+          <RouterLink
+            :to="{
+              name: 'ProfileView',
+              params: { user_id: authStore.info?.id || 'default' },
+            }"
+            class="hi"
+            v-if="authStore.info"
+          >
             <span>{{ authStore.info.username }}님 안녕하세요</span>
           </RouterLink>
           <span> | </span>
