@@ -136,7 +136,6 @@ const getInterestRate = (deposit, term) => {
 
 .filter-section,
 .table-section {
-  margin-top: 2px;
   padding: 20px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
@@ -161,6 +160,7 @@ form > div > select {
 .table-section {
   flex: 2;
   width: 100%;
+  /* border-top: none; */
 }
 
 table {
