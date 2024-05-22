@@ -10,8 +10,8 @@
     <div>
       <p>email: {{ info.email ? info.email : "미기입" }}</p>
       <p>age: {{ info.age ? info.age : "미기입" }}</p>
-      <p>잔고: {{ info.balance ? info.balance + "만원" : "미기입" }}</p>
-      <p>연봉: {{ info.income ? info.income + "만원" : "미기입" }}</p>
+      <p>잔고: {{ info.balance ? info.balance + "원" : "미기입" }}</p>
+      <p>연봉: {{ info.income ? info.income + "원" : "미기입" }}</p>
       <p>
         주거래은행: {{ info.favorite_bank ? info.favorite_bank : "미기입" }}
       </p>
@@ -30,7 +30,7 @@
     <div>
       <h4>가입 중인 적금 상품</h4>
       <ul>
-        <li v-for="saving in savings" :key="saving.fin_prdt_cd">
+        <li v-for="saving in savings" :key="saving.id">
           {{ saving.fin_prdt_nm }}
         </li>
       </ul>
@@ -65,6 +65,7 @@ onMounted(() => {
       url: `${authStore.API_URL}/accounts/${user_id.value}/`,
     })
       .then((res) => {
+        console.log(res.data);
         info.value = res.data;
         for (const item of res.data.deposit) {
           deposits.value.push(productStore.deposits.find((d) => d.id == item));

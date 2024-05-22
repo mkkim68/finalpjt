@@ -142,6 +142,7 @@ const userUpdate = function () {
     user_id: user_id.value,
   };
   authStore.userUpdate(payload);
+  authStore.getUserInfo(user_id.value);
 };
 </script>
 

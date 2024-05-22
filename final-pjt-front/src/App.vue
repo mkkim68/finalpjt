@@ -198,8 +198,12 @@ const sendMessageWithRateLimit = () => {
   }
 };
 
+import { useProductStore } from "./stores/product";
+const productStore = useProductStore();
 onMounted(() => {
   nextTick(scrollToBottom);
+  productStore.getDeposits();
+  productStore.getSavings();
 });
 </script>
 
