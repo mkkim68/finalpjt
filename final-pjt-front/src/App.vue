@@ -1,65 +1,147 @@
 <template>
   <header>
-    <nav>
-      <div class="menu">
-        <span class="logo">
-          <RouterLink to="/">
-            <img class="icon logo" src="@/assets/logo.png" alt="product" />
-          </RouterLink>
-        </span>
-        <RouterLink :to="{ name: 'DepositList' }" active-class="active">
-          <img class="icon product" src="@/assets/product.png" alt="product" />
-          <span class="link-text">예적금</span>
+    <nav class="navbar navbar-expand-lg" style="padding: 0">
+      <div
+        class="container-fluid"
+        style="padding: 10px 10px; background-color: rgb(255, 255, 255)"
+      >
+        <RouterLink to="/" class="navbar-brand">
+          <img class="icon logo" src="@/assets/logo.png" alt="product" />
         </RouterLink>
-        <RouterLink :to="{ name: 'ExchangeView' }" active-class="active">
-          <img
-            class="icon exchange"
-            src="@/assets/exchange.png"
-            alt="product"
-          />
-          <span class="link-text">환율</span>
-        </RouterLink>
-        <RouterLink :to="{ name: 'MapView' }" active-class="active">
-          <img class="icon map" src="@/assets/map.png" alt="product" />
-          <span class="link-text">지도</span>
-        </RouterLink>
-        <RouterLink :to="{ name: 'community' }" active-class="active">
-          <img
-            class="icon community"
-            src="@/assets/community.png"
-            alt="product"
-          />
-          <span class="link-text">게시판</span>
-        </RouterLink>
-        <RouterLink :to="{ name: 'ChartView' }" active-class="active">
-          <img class="icon chart" src="@/assets/chart.png" alt="product" />
-          <span class="link-text">차트</span>
-        </RouterLink>
-
-        <span class="user" v-if="!authStore.isLogin">
-          <RouterLink :to="{ name: 'SignUpView' }">
-            <span>회원가입</span>
-          </RouterLink>
-          <span> | </span>
-          <RouterLink :to="{ name: 'LogInView' }">
-            <span>로그인</span>
-          </RouterLink>
-        </span>
-        <span class="user" v-else>
-          <RouterLink
-            :to="{
-              name: 'ProfileView',
-              params: { user_id: authStore.info?.id || 'default' },
-            }"
-            class="hi"
-            v-if="authStore.info"
-          >
-            <span>{{ authStore.info.username }}님 안녕하세요</span>
-          </RouterLink>
-
-          <span> | </span>
-          <a @click="authStore.logOut"><span>로그아웃</span></a>
-        </span>
+        <button
+          class="navbar-toggler"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <RouterLink
+                class="nav-link"
+                :to="{ name: 'DepositList' }"
+                active-class="active"
+              >
+                <!-- <img
+                  class="icon leaf"
+                  src="@/assets/leaf.png"
+                  alt="leaf"
+                  style="width: 50px"
+                  active-class="active"
+                /> -->
+                <span class="link-text">예적금</span>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                class="nav-link"
+                :to="{ name: 'ExchangeView' }"
+                active-class="active"
+              >
+                <!-- <img
+                  class="icon leaf"
+                  src="@/assets/leaf.png"
+                  alt="leaf"
+                  style="width: 50px"
+                  active-class="active"
+                /> -->
+                <span class="link-text">환율</span>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                class="nav-link"
+                :to="{ name: 'MapView' }"
+                active-class="active"
+              >
+                <!-- <img class="icon map" src="@/assets/map.png" alt="product" /> -->
+                <span class="link-text">지도</span>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                class="nav-link"
+                :to="{ name: 'community' }"
+                active-class="active"
+              >
+                <!-- <img
+                  class="icon community"
+                  src="@/assets/community.png"
+                  alt="product"
+                /> -->
+                <span class="link-text">게시판</span>
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                class="nav-link"
+                :to="{ name: 'ChartView' }"
+                active-class="active"
+              >
+                <!-- <img
+                  class="icon chart"
+                  src="@/assets/chart.png"
+                  alt="product"
+                /> -->
+                <span class="link-text">차트</span>
+              </RouterLink>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                >{{
+                  authStore.isLogin
+                    ? `${authStore.info.username}님 안녕하세요`
+                    : "로그인 해주세요"
+                }}</a
+              >
+              <ul class="user dropdown-menu" v-if="!authStore.isLogin">
+                <li>
+                  <RouterLink
+                    :to="{ name: 'SignUpView' }"
+                    class="dropdown-item"
+                  >
+                    <span>회원가입</span>
+                  </RouterLink>
+                </li>
+                <li>
+                  <RouterLink :to="{ name: 'LogInView' }" class="dropdown-item">
+                    <span>로그인</span>
+                  </RouterLink>
+                </li>
+              </ul>
+              <ul class="user dropdown-menu" v-else>
+                <li>
+                  <RouterLink
+                    :to="{
+                      name: 'ProfileView',
+                      params: { user_id: authStore.info?.id || 'default' },
+                    }"
+                    class="hi dropdown-item"
+                    v-if="authStore.info"
+                  >
+                    <span class="wavy"
+                      >{{ authStore.info.username }}의 프로필</span
+                    >
+                  </RouterLink>
+                </li>
+                <li>
+                  <a class="dropdown-item" @click="authStore.logOut"
+                    ><span>로그아웃</span></a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   </header>
@@ -72,7 +154,7 @@
   <div id="chatbot-window" :class="{ hidden: !chatVisible }">
     <div id="chatbot-header">
       <span>Hi Chatbot</span>
-      <button @click="toggleChat">X</button>
+      <button @click="toggleChat" class="chat-x">X</button>
     </div>
     <div id="chatbot-messages">
       <div v-for="message in messages" :key="message.id" :class="message.type">
@@ -211,9 +293,35 @@ onMounted(() => {
 img.logo {
   width: 80px;
 }
+@keyframes coinEffect {
+  0% {
+    transform: rotateY(200deg);
+  }
+  15% {
+    transform: rotateY(300deg);
+  }
+  30% {
+    transform: rotateY(520deg);
+  }
+  50% {
+    transform: rotateY(1000deg);
+  }
+  70% {
+    transform: rotateY(520deg);
+  }
+  85% {
+    transform: rotateY(300deg);
+  }
+  100% {
+    transform: rotateY(200deg);
+  }
+}
+img.logo:hover {
+  animation: coinEffect 1.5s ease-in-out infinite forwards;
+}
 
 img.icon {
-  width: 50px;
+  width: 70px;
   margin-right: 0px;
 }
 
@@ -227,7 +335,7 @@ img.map {
 }
 
 div.menu {
-  background-color: #e4f9e9;
+  background-color: #eef5ff;
   display: flex;
   align-items: center;
   border-radius: 0 0 10px 10px;
@@ -257,7 +365,11 @@ div.menu > a > span {
 div.menu > a > img {
   padding: 0 5px;
 }
-
+span {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
 span.logo {
   padding-left: 15px;
   margin-right: 30px;
@@ -268,14 +380,16 @@ span.user > a {
   color: black;
   font-size: medium;
 }
-
+a {
+  text-align: start;
+}
 a:link,
 a:visited {
   text-decoration: none;
 }
 
 a:hover > span {
-  color: #13bd7e;
+  color: #7bbd8a;
   cursor: pointer;
 }
 
@@ -289,31 +403,35 @@ a.hi {
   display: inline-block;
 }
 
-a.hi:hover span {
+/* a.hi:hover span {
   display: inline-block;
   font-weight: bolder;
   opacity: 1;
   animation: waveEffect 3s ease-in-out forwards;
   align-items: center;
-}
+  z-index: 99;
+} */
 
 @keyframes waveEffect {
   0% {
-    opacity: 1;
-    color: black;
-    align-items: center;
+    top: 0px;
   }
   50% {
-    opacity: 1;
-    color: #5d87ff;
-    font-size: 1.2em;
-    align-items: center;
+    top: -15px;
   }
   100% {
-    opacity: 1;
-    color: black;
-    align-items: center;
+    top: 0px;
   }
+}
+
+.wavy:hover {
+  animation-name: waveEffect;
+  animation-duration: 1.3s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+  position: relative;
+  top: 0;
+  left: 0;
 }
 
 .active {
@@ -347,13 +465,16 @@ span > span {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff;
+  background-color: #9acbff;
   color: white;
   border-radius: 50%;
   padding: 15px;
   cursor: pointer;
   z-index: 1000;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+#chatbot-icon:hover {
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.35);
 }
 
 #chatbot-window {
@@ -369,11 +490,11 @@ span > span {
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 #chatbot-header {
-  background-color: #007bff;
+  background-color: #77b9ff;
   color: white;
   padding: 10px;
   display: flex;
@@ -416,6 +537,7 @@ span > span {
   border-top: 1px solid #ccc;
   padding: 10px;
   background-color: #f9f9f9;
+  border-radius: 0 0 10px 10px;
 }
 
 #chatbot-input input {
@@ -423,17 +545,52 @@ span > span {
   border: none;
   padding: 10px;
   outline: none;
+  border-radius: 10px 0 0 10px;
+}
+#chatbot-input input:focus {
+  border: 1px solid #82beff;
+  border-right: none;
 }
 
 #chatbot-input button {
-  border: none;
-  background-color: #007bff;
+  border: 1px solid #82beff;
+  background-color: #82beff;
   color: white;
   padding: 10px;
   cursor: pointer;
+  border-radius: 0 10px 10px 0;
+}
+#chatbot-input button:hover {
+  background-color: #64afff;
+}
+.chat-x {
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+.chat-x:hover {
+  color: #55a7ff;
 }
 
 .hidden {
   display: none !important;
+}
+menu {
+  position: relative;
+  width: 100%;
+  background-color: #87ceeb; /* 하늘색 배경 */
+}
+.toggler {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  box-shadow: #4caf50 0px 2px 1px;
+  position: relative;
+  top: 0px;
+}
+.toggler:hover {
+  box-shadow: none;
+  top: 2px; /* hover 시 위치 변경 */
 }
 </style>

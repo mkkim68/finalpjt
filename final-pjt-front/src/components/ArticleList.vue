@@ -1,11 +1,12 @@
 <template>
   <div class="container">
-    <h1>Article List</h1>
+    <h1>게시판</h1>
     <div>
       <p v-for="article in articleStore.articles" :key="article.pk">
         <RouterLink
           :to="{ name: 'community-detail', params: { article_id: article.id } }"
-          >{{ article.title }}</RouterLink
+          ><span>{{ article.title }}</span
+          ><span>댓글: {{ article.comment_count }}</span></RouterLink
         >
       </p>
     </div>
@@ -24,4 +25,21 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+a {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px;
+  text-decoration: none;
+}
+p:hover {
+  background-color: rgb(235, 235, 235);
+}
+p {
+  background-color: white;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  /* border-bottom: 1px solid #4696ff; */
+}
+</style>

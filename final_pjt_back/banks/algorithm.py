@@ -1,14 +1,18 @@
+import os
 import pandas as pd
 import numpy as np
 import sqlite3
+from django.conf import settings
 
-con = sqlite3.connect(r"C:\Users\SSAFY\Documents\mk\PJT\final-pjt\final_pjt_back\db.sqlite3")
+db_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+
+con = sqlite3.connect(db_path)
 def deposit_recommend_age(target_age):
     Query_String = f"SELECT * FROM accounts_user a INNER JOIN accounts_user_deposit b ON a.id = b.user_id WHERE a.age BETWEEN {target_age - 5} AND {target_age + 5}"
     df = pd.read_sql_query(Query_String, con)
     answer = df['deposit_id'].value_counts().head(3)
     con.close()
-    return 'hi'
+    return answer.index
 
 # deposit_recommend_age(30)
 
