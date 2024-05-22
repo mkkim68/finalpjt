@@ -21,6 +21,7 @@ from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSer
 from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange
 from accounts.serializers import CustomUserSerializer
 import logging
+from .algorithm import deposit_recommend_age
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -196,20 +197,37 @@ def saving_detail_join(request, fin_prdt_cd):
         my_dict = {'isJoined': True}
         return Response(my_dict)
     
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated]) 
+# def deposit_recommend(request, user_id):
+#     user = User.objects.get(pk=user_id)
+#     if request.method == 'GET':
+#         user_serializer = CustomUserSerializer(user)
+#         age, favorite_bank, balance, income = user_serializer.data.age, user_serializer.data.favorite_bank, user_serializer.data.balance, user_serializer.data.income
+#         context = {
+#             'age': [],
+#             'favorite_bank': [],
+#             'balance': [],
+#             'income': []
+#         }
+#     return Response(context)
+
+## views.py
+# 알고리즘 파일 가져오기
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
 def deposit_recommend(request, user_id):
-    user = User.objects.get(pk=user_id)
+    user = get_object_or_404(User, pk=user_id)
     if request.method == 'GET':
         user_serializer = CustomUserSerializer(user)
-        age, favorite_bank, balance, income = user_serializer.data.age, user_serializer.data.favorite_bank, user_serializer.data.balance, user_serializer.data.income
+        age = user_serializer.data['age']
+
+        recommended_deposit_ids = deposit_recommend_age(age)
+
         context = {
-            'age': [],
-            'favorite_bank': [],
-            'balance': [],
-            'income': []
+            'age_recommendations': recommended_deposit_ids.tolist()  # Convert to list for JSON serialization
         }
-    return Response(context)
+        return Response(context)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -288,3 +306,35 @@ def get_local_exchange(request):
 def bank_list(request):
     banks = Deposit.objects.values_list('kor_co_nm', flat=True).distinct()
     return Response(banks)
+
+# 가입한 예적금 상품 조회용
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def account_details(request, user_id):
+#     user = get_object_or_404(User, pk=user_id)
+#     deposits = user.deposit_set.all()
+#     savings = user.saving_set.all()
+    
+#     deposit_data = []
+#     for deposit in deposits:
+#         options = DepositOptions.objects.filter(deposit=deposit)
+#         deposit_data.append({
+#             "deposit": DepositSerializer(deposit).data,
+#             "options": DepositOptionsSerializers(options, many=True).data
+#         })
+    
+#     saving_data = []
+#     for saving in savings:
+#         options = SavingOptions.objects.filter(saving=saving)
+#         saving_data.append({
+#             "saving": SavingSerializer(saving).data,
+#             "options": SavingOptionsSerializers(options, many=True).data
+#         })
+
+#     data = {
+#         "user": CustomUserSerializer(user).data,
+#         "deposits": deposit_data,
+#         "savings": saving_data
+#     }
+
+#     return Response(data)

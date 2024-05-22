@@ -5,15 +5,51 @@ from rest_framework.permissions import IsAuthenticated
 
 from .serializers import CustomUserSerializer
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from banks.models import Deposit, DepositOptions, Saving, SavingOptions
+from .models import User
+from banks.serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers
+from .serializers import CustomUserSerializer
+
 User = get_user_model()
 
+# @api_view(['GET'])
+# def get_user_by_id(request, user_id):
+#     if request.method == "GET":
+#         user = User.objects.get(pk=user_id)
+#         serializer = CustomUserSerializer(user)
+#         return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user_by_id(request, user_id):
-    if request.method == "GET":
-        user = User.objects.get(pk=user_id)
-        serializer = CustomUserSerializer(user)
-        return Response(serializer.data)
+    user = get_object_or_404(User, pk=user_id)
+    deposits = user.deposit_set.all()
+    savings = user.saving_set.all()
+    
+    deposit_data = []
+    for deposit in deposits:
+        options = DepositOptions.objects.filter(deposit=deposit)
+        deposit_data.append({
+            "deposit": DepositSerializer(deposit).data,
+            "options": DepositOptionsSerializers(options, many=True).data
+        })
+    
+    saving_data = []
+    for saving in savings:
+        options = SavingOptions.objects.filter(saving=saving)
+        saving_data.append({
+            "saving": SavingSerializer(saving).data,
+            "options": SavingOptionsSerializers(options, many=True).data
+        })
+
+    data = {
+        "user": CustomUserSerializer(user).data,
+        "deposits": deposit_data,
+        "savings": saving_data
+    }
+
+    return Response(data)
 
 @api_view(['GET']) 
 def get_user_by_username(request, username):

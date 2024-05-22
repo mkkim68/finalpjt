@@ -46,6 +46,9 @@ export const useAuthStore = defineStore(
           axios({
             method: "get",
             url: `${API_URL}/accounts/${username}/`,
+            headers: {
+              Authorization: `Token ${token.value}`,
+            },
           })
             .then((res) => {
               info.value = res.data;
@@ -59,6 +62,9 @@ export const useAuthStore = defineStore(
       axios({
         method: "post",
         url: `${API_URL}/accounts/logout/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
       })
         .then((res) => {
           router.push({ name: "LogInView" });
@@ -69,11 +75,7 @@ export const useAuthStore = defineStore(
     };
 
     const isLogin = computed(() => {
-      if (token.value === null) {
-        return false;
-      } else {
-        return true;
-      }
+      return token.value !== null;
     });
 
     const userUpdate = function (payload) {
@@ -113,6 +115,9 @@ export const useAuthStore = defineStore(
       axios({
         method: "get",
         url: `${API_URL}/accounts/${user_id}/`,
+        headers: {
+          Authorization: `Token ${token.value}`,
+        },
       })
         .then((res) => {
           info.value = res.data;
