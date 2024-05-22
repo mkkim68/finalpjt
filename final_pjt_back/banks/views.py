@@ -21,6 +21,8 @@ from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSer
 from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange
 from accounts.serializers import CustomUserSerializer
 import logging
+from .algorithm import deposit_recommend_age 
+
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -195,21 +197,23 @@ def saving_detail_join(request, fin_prdt_cd):
         user.saving.add(saving)
         my_dict = {'isJoined': True}
         return Response(my_dict)
-    
+
+
+# 알고리즘 파일 가져오기
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
 def deposit_recommend(request, user_id):
-    user = User.objects.get(pk=user_id)
+    user = get_object_or_404(User, pk=user_id)
     if request.method == 'GET':
         user_serializer = CustomUserSerializer(user)
-        age, favorite_bank, balance, income = user_serializer.data.age, user_serializer.data.favorite_bank, user_serializer.data.balance, user_serializer.data.income
+        age = user_serializer.data['age']
+
+        recommended_deposit_ids = deposit_recommend_age(age)
+
         context = {
-            'age': [],
-            'favorite_bank': [],
-            'balance': [],
-            'income': []
+            'age_recommendations': recommended_deposit_ids.tolist()  # Convert to list for JSON serialization
         }
-    return Response(context)
+        return Response(context)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
