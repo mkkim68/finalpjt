@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>새 게시글 작성</h1>
     <form @submit.prevent="create">
       <label for="title">제목</label><br />
