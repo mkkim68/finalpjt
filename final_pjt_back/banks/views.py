@@ -288,3 +288,32 @@ def get_local_exchange(request):
 def bank_list(request):
     banks = Deposit.objects.values_list('kor_co_nm', flat=True).distinct()
     return Response(banks)
+
+# banks/views.py
+@api_view(['GET'])
+def deposit_options_detail(request, fin_prdt_cd):
+    logger.debug(f"Request received for deposit options with fin_prdt_cd: {fin_prdt_cd}")
+    try:
+        options = DepositOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
+        if options.exists():
+            serializer = DepositOptionsSerializers(options, many=True)
+            return Response(serializer.data)
+        logger.debug(f"No options found for fin_prdt_cd: {fin_prdt_cd}")
+        return Response(status=404)
+    except DepositOptions.DoesNotExist:
+        logger.error(f"Deposit options for fin_prdt_cd: {fin_prdt_cd} does not exist")
+        return Response(status=404)
+
+@api_view(['GET'])
+def saving_options_detail(request, fin_prdt_cd):
+    logger.debug(f"Request received for saving options with fin_prdt_cd: {fin_prdt_cd}")
+    try:
+        options = SavingOptions.objects.filter(fin_prdt_cd=fin_prdt_cd)
+        if options.exists():
+            serializer = SavingOptionsSerializers(options, many=True)
+            return Response(serializer.data)
+        logger.debug(f"No options found for fin_prdt_cd: {fin_prdt_cd}")
+        return Response(status=404)
+    except SavingOptions.DoesNotExist:
+        logger.error(f"Saving options for fin_prdt_cd: {fin_prdt_cd} does not exist")
+        return Response(status=404)
