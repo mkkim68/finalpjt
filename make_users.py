@@ -122,7 +122,7 @@ while j < N:
 
 
 # 저장 위치는 프로젝트 구조에 맞게 수정합니다.
-save_dir = r'final_pjt_back\accounts\fixtures\accouts\user_data.json'
+save_dir = r'final_pjt_back\accounts\fixtures\accounts\user_data.json'
 with open(save_dir, 'w', encoding="utf-8") as f:
     f.write('[')
 

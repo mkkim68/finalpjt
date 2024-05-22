@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+import sqlite3
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -15,12 +19,14 @@ import requests
 
 from .serializers import DepositSerializer, DepositOptionsSerializers, SavingSerializer, SavingOptionsSerializers, ExchangeSerializer
 from .models import Deposit, DepositOptions, Saving, SavingOptions, Exchange
+from accounts.serializers import CustomUserSerializer
 import logging
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
 BASE_URL='http://finlife.fss.or.kr/finlifeapi/'
+
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
@@ -189,6 +195,26 @@ def saving_detail_join(request, fin_prdt_cd):
         user.saving.add(saving)
         my_dict = {'isJoined': True}
         return Response(my_dict)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
+def deposit_recommend(request, user_id):
+    user = User.objects.get(pk=user_id)
+    if request.method == 'GET':
+        user_serializer = CustomUserSerializer(user)
+        age, favorite_bank, balance, income = user_serializer.data.age, user_serializer.data.favorite_bank, user_serializer.data.balance, user_serializer.data.income
+        context = {
+            'age': [],
+            'favorite_bank': [],
+            'balance': [],
+            'income': []
+        }
+    return Response(context)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def saving_recommend(request, user_id):
+    return
 
 def get_previous_business_day(date):
     while True:
