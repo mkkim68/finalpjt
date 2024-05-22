@@ -12,16 +12,20 @@ export const useAuthStore = defineStore(
     const router = useRouter();
 
     const signUp = function (payload) {
-      const data = ref({});
-      for (const item in payload) {
-        if (payload[item] !== null) {
-          data.value[item] = payload[item];
-        }
-      }
       axios({
         method: "post",
         url: `${API_URL}/accounts/signup/`,
-        data: data.value,
+        data: {
+          username: payload.username,
+          email: payload.email,
+          password1: payload.password1,
+          password2: payload.password2,
+          age: payload.age,
+          balance: payload.balance,
+          income: payload.income,
+          favorite_bank: payload.favorite_bank,
+          invest_type: payload.invest_type,
+        },
       })
         .then((res) => {
           router.push({ name: "LogInView" });
@@ -69,11 +73,7 @@ export const useAuthStore = defineStore(
     };
 
     const isLogin = computed(() => {
-      if (token.value === null) {
-        return false;
-      } else {
-        return true;
-      }
+      return token.value !== null;
     });
 
     const userUpdate = function (payload) {
@@ -91,13 +91,13 @@ export const useAuthStore = defineStore(
         method: "put",
         url: `${API_URL}/accounts/${user_id}/update/`,
         data: {
-          username: username,
-          email: email,
-          age: age,
-          balance: balance,
-          income: income,
-          favorite_bank: favorite_bank,
-          invest_type: invest_type,
+          username,
+          email,
+          age,
+          balance,
+          income,
+          favorite_bank,
+          invest_type,
         },
         headers: {
           Authorization: `Token ${token.value}`,

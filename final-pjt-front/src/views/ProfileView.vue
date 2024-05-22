@@ -35,6 +35,10 @@
         </li>
       </ul>
     </div>
+    <div>
+      <h4>추천 예금 상품</h4>
+      <canvas id="depositChart"></canvas>
+    </div>
   </div>
   <div v-else>
     <p>로그인이 필요합니다.</p>
@@ -48,6 +52,7 @@ import { useProductStore } from "@/stores/product";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter, RouterLink, RouterView } from "vue-router";
 import axios from "axios";
+import { Chart } from "chart.js";
 
 const authStore = useAuthStore();
 const productStore = useProductStore();
@@ -57,6 +62,51 @@ const user_id = ref(route.params.user_id || authStore.info?.id);
 const info = ref(null);
 const deposits = ref([]);
 const savings = ref([]);
+const recommendations = ref([]);
+
+const getDepositRecommendations = async () => {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/deposit_recommend/${user_id.value}/`);
+    recommendations.value = response.data.age_recommendations;
+    drawChart(recommendations.value);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const drawChart = async (recommendations) => {
+  const depositNames = [];
+  for (const id of recommendations) {
+    const deposit = await axios.get(`${authStore.API_URL}/deposits/${id}/`);
+    depositNames.push(deposit.data.fin_prdt_nm);
+  }
+
+  const ctx = document.getElementById('depositChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: depositNames,
+      datasets: [{
+        label: 'Top 3 Recommended Deposits',
+        data: Array(recommendations.length).fill(1),  // Assuming we just want to show the top 3 without counts
+        backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+        borderColor: ['rgba(75, 192, 192, 1)'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            precision: 0  // Ensure the ticks are integer values
+          }
+        }
+      }
+    }
+  });
+};
+
 
 onMounted(() => {
   if (user_id.value) {
@@ -82,4 +132,4 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
