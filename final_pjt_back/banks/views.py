@@ -225,6 +225,12 @@ def exchange(request):
                         'ttb': float(res.get('ttb').replace(',', '')),
                         'tts': float(res.get('tts').replace(',', '')),
                         'deal_bas_r': float(res.get('deal_bas_r').replace(',', '')),
+                        'bkpr': res.get('bkpr'),
+                        'yy_efee_r': res.get('yy_efee_r'),
+                        'ten_dd_efee_r': res.get('ten_dd_efee_r'),
+                        'kftc_deal_bas_r': res.get('kftc_deal_bas_r'),
+                        'kftc_bkpr': res.get('kftc_bkpr'),
+                        'date': datetime.strptime(current_date, '%Y%m%d')
                     }
                     serializer = ExchangeSerializer(data=save_data)
                     if serializer.is_valid(raise_exception=True):
@@ -246,7 +252,7 @@ def exchange(request):
 @api_view(['GET'])
 def get_local_exchange(request):
     try:
-        latest_exchange = Exchange.objects.latest('created_at')
+        latest_exchange = Exchange.objects.latest('date')
         serializer = ExchangeSerializer(latest_exchange)
         return Response(serializer.data)
     except Exchange.DoesNotExist:

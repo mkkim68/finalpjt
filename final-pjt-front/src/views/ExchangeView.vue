@@ -20,6 +20,35 @@
       </div>
       <p>* 엔화, 인도네시아 루피아는 100단위, 나머지는 모두 1단위</p>
     </div>
+
+    <div class="currency-table">
+      <table>
+        <thead style="text-align: center">
+          <tr>
+            <th class="first">통화코드</th>
+            <th class="second">국가/통화명</th>
+            <th class="third">송금 받을 때 </th>
+            <th class="third">송금 보낼 때</th>
+            <th class="third">매매 기준율</th>
+            <th class="third">장부 가격</th>
+            <th class="third">서울외국환중개 매매기준율</th>
+            <th class="third">서울외국환중개 장부가격</th>
+          </tr>
+        </thead>
+        <tbody style="text-align: right">
+          <tr v-for="exchange in exchanges" :key="exchange.id">
+            <td style="text-align: left">{{ exchange.cur_unit }}</td>
+            <td style="text-align: left">{{ exchange.cur_nm }}</td>
+            <td>{{ exchange.ttb }}</td>
+            <td>{{ exchange.tts }}</td>
+            <td>{{ exchange.deal_bas_r }}</td>
+            <td>{{ exchange.bkpr }}</td>
+            <td>{{ exchange.kftc_deal_bas_r }}</td>
+            <td>{{ exchange.kftc_bkpr }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -126,8 +155,41 @@ input[type="text"][readonly] {
   align-items: center;
 }
 
-
 p {
   margin-top: 10px;
+}
+
+.currency-table {
+  width: 100%;
+  margin: 50px 0px;
+}
+
+table {
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #f4fff4;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 1em;
+}
+
+th.first {
+  width: 10%;
+}
+
+th.second {
+  width: 23%;
+}
+
+th.third {
+  width: 10%;
 }
 </style>
