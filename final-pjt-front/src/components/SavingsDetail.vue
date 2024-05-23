@@ -6,7 +6,7 @@
         가입하기
       </button>
       <button disabled class="btn btn-secondary" @click="join" v-else>
-        가입 중
+        가입 완료
       </button>
     </h1>
     <p>{{ saving.kor_co_nm }}</p>
@@ -57,12 +57,13 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/product";
 import axios from "axios";
 
+const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 const productStore = useProductStore();
@@ -110,7 +111,12 @@ onMounted(() => {
         })
         .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+
+      alert("로그인 해주세요.");
+      router.replace({ name: "LogInView" });
+    });
 });
 
 const join = function () {

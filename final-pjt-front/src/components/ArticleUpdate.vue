@@ -1,23 +1,34 @@
 <template>
-  <div>
+  <div class="container">
     <h1>게시글 수정</h1>
-    <form @submit.prevent="update" v-if="title">
-      <label for="title">제목</label><br />
+    <form @submit.prevent="update">
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="floatingInput"
+          v-model.trim="title"
+          placeholder=""
+        />
+        <label for="floatingInput">제목</label>
+      </div>
+      <div class="form-floating">
+        <input
+          class="form-control"
+          placeholder="내용을 입력해주세요."
+          v-model.trim="content"
+          id="content"
+          type="text"
+          style="height: 100px"
+        />
+        <label for="content">내용</label>
+      </div>
       <input
-        type="text"
-        id="title"
-        v-model.trim="title"
-        placeholder="제목을 입력해주세요."
-      /><br />
-      <label for="content">내용</label><br />
-      <textarea
-        type="text"
-        id="content"
-        v-model.trim="content"
-        placeholder="내용을 입력해주세요."
+        style="margin-top: 10px"
+        class="btn btn-light"
+        type="submit"
+        value="수정하기"
       />
-      <br />
-      <input type="submit" value="수정하기" />
     </form>
   </div>
 </template>
@@ -64,4 +75,4 @@ const update = function () {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

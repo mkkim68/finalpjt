@@ -52,7 +52,10 @@ export const useAuthStore = defineStore(
             })
             .catch((err) => console.log(err));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          alert("유효하지 않은 입력입니다.");
+        });
     };
 
     const logOut = function () {
