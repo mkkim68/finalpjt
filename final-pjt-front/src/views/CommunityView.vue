@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div>
+      <RouterLink :to="{ name: 'community' }">게시판</RouterLink>
       <RouterLink :to="{ name: 'community-create' }" v-if="authStore.isLogin"
         >새 글 작성</RouterLink
       >
-      <RouterLink :to="{ name: 'community' }">게시판</RouterLink>
     </div>
   </div>
   <RouterView />

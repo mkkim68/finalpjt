@@ -57,9 +57,28 @@
             <input type="number" id="age" v-model="age" />
           </td>
         </tr>
+
         <tr>
           <th>
-            <label for="balance">잔액(만원 단위)</label>
+            <label for="last-name">성</label>
+          </th>
+          <td>
+            <input type="text" id="last-name" v-model="last_name" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <label for="first-name">이름</label>
+          </th>
+          <td>
+            <input type="text" id="first-name" v-model="first_name" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <label for="balance">잔액(원)</label>
           </th>
           <td>
             <input type="number" id="balance" v-model="balance" />
@@ -67,7 +86,7 @@
         </tr>
         <tr>
           <th>
-            <label for="income">연봉(만원 단위)</label>
+            <label for="income">연봉(원)</label>
           </th>
           <td>
             <input type="number" id="income" v-model="income" />
@@ -131,6 +150,8 @@ const balance = ref(null);
 const income = ref(null);
 const favorite_bank = ref(null);
 const invest_type = ref(null);
+const first_name = ref(null);
+const last_name = ref(null);
 
 const store = useAuthStore();
 
@@ -145,6 +166,8 @@ const signUp = function () {
     income: income.value,
     favorite_bank: favorite_bank.value,
     invest_type: invest_type.value,
+    first_name: first_name.value,
+    last_name: last_name.value,
   };
   store.signUp(payload);
 };
