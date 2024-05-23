@@ -93,7 +93,7 @@
               </RouterLink>
             </li>
           </ul>
-          <p style="margin:0 20px" class="nav-item dropdown">
+          <p style="margin:0 20px 0 0" class="nav-item dropdown">
             <button
               class="nav-link dropdown-toggle"
               href="#"
