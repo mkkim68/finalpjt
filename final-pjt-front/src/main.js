@@ -8,12 +8,11 @@ import "@/assets/styles/main.css";
 import App from "./App.vue";
 import router from "./router";
 
-const app = createApp(App);
 const pinia = createPinia();
+const app = createApp(App);
 
 pinia.use(piniapluginPersistedstate);
 app.use(pinia);
-
 app.use(router);
 
 app.mount("#app");

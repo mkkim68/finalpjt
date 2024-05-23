@@ -18,6 +18,7 @@ import ProfileUpdate from "@/components/ProfileUpdate.vue";
 import DepositDetail from "@/components/DepositDetail.vue";
 import SavingsDetail from "@/components/SavingsDetail.vue";
 import { useProductStore } from "@/stores/product";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -126,8 +127,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const store = useProductStore();
-  if (to.name === "~View" && !store.isLogin) {
+  const store = useAuthStore();
+  if (to.name === "ChartView" && !store.isLogin) {
+    window.alert("로그인이 필요합니다.");
+    next({ name: "LogInView" });
+  } else if (to.name.indexOf("Detail") > -1 && !store.isLogin) {
     window.alert("로그인이 필요합니다.");
     next({ name: "LogInView" });
   } else if (

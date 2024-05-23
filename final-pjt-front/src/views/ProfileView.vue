@@ -137,7 +137,7 @@ const drawChart = (labels, data1, data2) => {
           borderWidth: 1,
         },
         {
-          label: "최고 우대금리 금리",
+          label: "최고 우대금리",
           data: data2,
           backgroundColor: "rgba(153, 102, 255, 0.2)",
           borderColor: "rgba(153, 102, 255, 1)",
