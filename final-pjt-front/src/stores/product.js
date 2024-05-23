@@ -7,6 +7,22 @@ export const useProductStore = defineStore(
   () => {
     const deposits = ref([]);
     const savings = ref([]);
+    const banks = {
+      "0010001": "우리은행",
+      "0010927": "국민은행",
+      "0011625": "신한은행",
+      "0010002": "한국스탠다드차타드은행",
+      "0010006": "한국씨티은행",
+      "0013909": "하나은행",
+      "0013175": "농협",
+      "0015130": "카카오뱅크",
+      "0017801": "토스뱅크",
+      "0010016": "대구은행",
+      "0010017": "부산은행",
+      "0010019": "광주은행",
+      "0010020": "제주은행",
+      "0014807": "수협은행",
+    };
     const loadingDeposits = ref(false);
     const loadingSavings = ref(false);
     const API_URL = "http://127.0.0.1:8000";
@@ -84,6 +100,7 @@ export const useProductStore = defineStore(
     return {
       deposits,
       savings,
+      banks,
       loadingDeposits,
       loadingSavings,
       getDeposits,

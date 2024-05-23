@@ -1,13 +1,14 @@
 <template>
   <div v-if="info" class="container">
     <h1>{{ info.username }}'s Profile</h1>
-    <div class="info">
+    <div class="info" style="margin: 10px 0px">
       <button class="revise">
         <RouterLink
           v-if="Number(authStore.info.id) === Number(user_id)"
           :to="{ name: 'ProfileUpdate' }"
-          >개인정보 수정</RouterLink>
-        </button>
+          >개인정보 수정</RouterLink
+        >
+      </button>
       <table class="info_table">
         <tr>
           <th>이메일</th>
@@ -27,7 +28,13 @@
         </tr>
         <tr>
           <th>주거래 은행</th>
-          <td>{{ info.favorite_bank ? info.favorite_bank : "미기입" }}</td>
+          <td>
+            {{
+              info.favorite_bank
+                ? productStore.banks[info.favorite_bank]
+                : "미기입"
+            }}
+          </td>
         </tr>
         <tr>
           <th>저축 유형</th>
@@ -42,19 +49,21 @@
         <div class="product-lists">
           <div>
             <h6>예금</h6>
-            <ul>
+            <ul v-if="deposits.length">
               <li v-for="deposit in deposits" :key="deposit.id">
                 {{ deposit.fin_prdt_nm }}
               </li>
             </ul>
+            <p v-else>가입한 상품이 없습니다.</p>
           </div>
           <div>
             <h6>적금</h6>
-            <ul>
+            <ul v-if="savings.length">
               <li v-for="saving in savings" :key="saving.id">
                 {{ saving.fin_prdt_nm }}
               </li>
             </ul>
+            <p v-else>가입한 상품이 없습니다.</p>
           </div>
         </div>
       </div>
@@ -305,7 +314,6 @@ button.revise:hover {
   background-color: #2e8531;
 }
 
-
 .container > div {
   margin: 50px 0px;
 }
@@ -324,7 +332,8 @@ button.revise:hover {
   padding: 5px 15px;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
 }
 
