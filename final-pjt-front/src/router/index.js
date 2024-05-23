@@ -93,7 +93,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/chart",
+      path: "/recommend",
       name: "ChartView",
       component: ChartView,
     },

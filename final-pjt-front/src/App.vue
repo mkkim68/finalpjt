@@ -9,7 +9,8 @@
           <img class="icon logo" src="@/assets/logo.png" alt="product" />
         </RouterLink>
         <button
-          class="navbar-toggler"
+          id="toggler"
+          class="navbar-toggler toggler"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent"
@@ -87,7 +88,7 @@
                   src="@/assets/chart.png"
                   alt="product"
                 /> -->
-                <span class="link-text">차트</span>
+                <span class="link-text">상품 추천</span>
               </RouterLink>
             </li>
             <li class="nav-item dropdown">
@@ -103,23 +104,22 @@
                     : "로그인 해주세요"
                 }}</a
               >
-              <ul class="user dropdown-menu" v-if="!authStore.isLogin">
-                <li>
+              <ul class="user dropdown-menu">
+                <li v-if="!authStore.isLogin">
                   <RouterLink
                     :to="{ name: 'SignUpView' }"
                     class="dropdown-item"
+                    v-if="!authStore.isLogin"
                   >
                     <span>회원가입</span>
                   </RouterLink>
                 </li>
-                <li>
+                <li v-if="!authStore.isLogin">
                   <RouterLink :to="{ name: 'LogInView' }" class="dropdown-item">
                     <span>로그인</span>
                   </RouterLink>
                 </li>
-              </ul>
-              <ul class="user dropdown-menu" v-else>
-                <li>
+                <li v-if="authStore.isLogin">
                   <RouterLink
                     :to="{
                       name: 'ProfileView',
@@ -133,7 +133,7 @@
                     >
                   </RouterLink>
                 </li>
-                <li>
+                <li v-if="authStore.isLogin">
                   <a class="dropdown-item" @click="authStore.logOut"
                     ><span>로그아웃</span></a
                   >
@@ -290,6 +290,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.toggler:focus {
+  outline: none !important;
+}
 img.logo {
   width: 80px;
 }
@@ -310,10 +313,10 @@ img.logo {
     transform: rotateY(520deg);
   }
   85% {
-    transform: rotateY(300deg);
+    transform: rotateY(200deg);
   }
   100% {
-    transform: rotateY(200deg);
+    transform: rotateY(100deg);
   }
 }
 img.logo:hover {
@@ -585,12 +588,10 @@ menu {
   border: none;
   outline: none;
   border-radius: 20px;
-  box-shadow: #4caf50 0px 2px 1px;
   position: relative;
   top: 0px;
 }
 .toggler:hover {
-  box-shadow: none;
-  top: 2px; /* hover 시 위치 변경 */
+  border: 1px solid #4caf50;
 }
 </style>

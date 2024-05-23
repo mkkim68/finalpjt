@@ -59,8 +59,8 @@ import {
   LinearScale,
   Title,
   Tooltip,
-  Legend
-} from 'chart.js';
+  Legend,
+} from "chart.js";
 
 Chart.register(
   BarController,
@@ -84,67 +84,92 @@ const savings = ref([]);
 let myChart = null;
 
 const drawChart = (labels, data1, data2) => {
-  const ctx = document.getElementById('interestChart').getContext('2d');
-  
+  const ctx = document.getElementById("interestChart").getContext("2d");
+
   if (myChart) {
     myChart.destroy();
   }
 
   myChart = new Chart(ctx, {
-    type: 'bar',
+    type: "bar",
     data: {
       labels: labels,
       datasets: [
         {
-          label: '저축 금리',
+          label: "저축 금리",
           data: data1,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
         },
         {
-          label: '최고 우대금리 금리',
+          label: "최고 우대금리 금리",
           data: data2,
-          backgroundColor: 'rgba(153, 102, 255, 0.2)',
-          borderColor: 'rgba(153, 102, 255, 1)',
-          borderWidth: 1
-        }
-      ]
+          backgroundColor: "rgba(153, 102, 255, 0.2)",
+          borderColor: "rgba(153, 102, 255, 1)",
+          borderWidth: 1,
+        },
+      ],
     },
     options: {
       scales: {
         y: {
-          beginAtZero: true
-        }
-      }
-    }
+          beginAtZero: true,
+        },
+      },
+    },
   });
 };
 
 const getProductData = async () => {
-  const depositData = await Promise.all(deposits.value.map(async (deposit) => {
-    try {
-      const response = await axios.get(`${authStore.API_URL}/api/banks/deposit-options/${deposit.fin_prdt_cd}/`);
-      console.log(`Deposit options for ${deposit.fin_prdt_cd}:`, response.data);
-      return response.data.map(option => ({ ...option, fin_prdt_nm: deposit.fin_prdt_nm }));
-    } catch (error) {
-      console.error(`Error fetching deposit options for ${deposit.fin_prdt_cd}`, error);
-      return null;
-    }
-  }));
+  const depositData = await Promise.all(
+    deposits.value.map(async (deposit) => {
+      try {
+        const response = await axios.get(
+          `${authStore.API_URL}/api/banks/deposit-options/${deposit.fin_prdt_cd}/`
+        );
+        console.log(
+          `Deposit options for ${deposit.fin_prdt_cd}:`,
+          response.data
+        );
+        return response.data.map((option) => ({
+          ...option,
+          fin_prdt_nm: deposit.fin_prdt_nm,
+        }));
+      } catch (error) {
+        console.error(
+          `Error fetching deposit options for ${deposit.fin_prdt_cd}`,
+          error
+        );
+        return null;
+      }
+    })
+  );
 
-  const savingData = await Promise.all(savings.value.map(async (saving) => {
-    try {
-      const response = await axios.get(`${authStore.API_URL}/api/banks/saving-options/${saving.fin_prdt_cd}/`);
-      console.log(`Saving options for ${saving.fin_prdt_cd}:`, response.data);
-      return response.data.map(option => ({ ...option, fin_prdt_nm: saving.fin_prdt_nm }));
-    } catch (error) {
-      console.error(`Error fetching saving options for ${saving.fin_prdt_cd}`, error);
-      return null;
-    }
-  }));
+  const savingData = await Promise.all(
+    savings.value.map(async (saving) => {
+      try {
+        const response = await axios.get(
+          `${authStore.API_URL}/api/banks/saving-options/${saving.fin_prdt_cd}/`
+        );
+        console.log(`Saving options for ${saving.fin_prdt_cd}:`, response.data);
+        return response.data.map((option) => ({
+          ...option,
+          fin_prdt_nm: saving.fin_prdt_nm,
+        }));
+      } catch (error) {
+        console.error(
+          `Error fetching saving options for ${saving.fin_prdt_cd}`,
+          error
+        );
+        return null;
+      }
+    })
+  );
 
-  const allData = [...depositData, ...savingData].filter(data => data !== null);
+  const allData = [...depositData, ...savingData].filter(
+    (data) => data !== null
+  );
 
   console.log("Deposit Data:", depositData);
   console.log("Saving Data:", savingData);
@@ -162,9 +187,9 @@ const processData = (productData) => {
 
   const productMap = new Map();
 
-  productData.forEach(productArray => {
+  productData.forEach((productArray) => {
     if (Array.isArray(productArray)) {
-      productArray.forEach(product => {
+      productArray.forEach((product) => {
         let name = "Unknown Product";
 
         if (product.fin_prdt_nm) {
@@ -199,14 +224,20 @@ const processData = (productData) => {
 onMounted(async () => {
   if (user_id.value) {
     try {
-      const res = await axios.get(`${authStore.API_URL}/accounts/${user_id.value}/`);
+      const res = await axios.get(
+        `${authStore.API_URL}/accounts/${user_id.value}/`
+      );
       info.value = res.data;
-      deposits.value = res.data.deposit.map(depositId => {
-        return productStore.deposits.find((d) => d.id === depositId) || {};
-      }).filter(deposit => deposit.id);
-      savings.value = res.data.saving.map(savingId => {
-        return productStore.savings.find((s) => s.id === savingId) || {};
-      }).filter(saving => saving.id);
+      deposits.value = res.data.deposit
+        .map((depositId) => {
+          return productStore.deposits.find((d) => d.id === depositId) || {};
+        })
+        .filter((deposit) => deposit.id);
+      savings.value = res.data.saving
+        .map((savingId) => {
+          return productStore.savings.find((s) => s.id === savingId) || {};
+        })
+        .filter((saving) => saving.id);
 
       const productData = await getProductData();
       processData(productData);
