@@ -8,7 +8,6 @@ urlpatterns = [
     path('deposit-options/', views.deposit_option_list),
     path('deposit-options/<str:fin_prdt_cd>/', views.deposit_options_detail),
     path('deposits/<str:fin_prdt_cd>/', views.deposit_detail),
-    path('deposits/<str:fin_prdt_cd>/', views.deposit_detail),
     path('deposits/<str:fin_prdt_cd>/option/', views.deposit_detail_option),
     path('deposits/<str:fin_prdt_cd>/join/', views.deposit_detail_join),
     #적금

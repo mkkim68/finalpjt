@@ -8,7 +8,6 @@
         <RouterLink to="/" class="navbar-brand">
           <img class="icon" src="@/assets/coin_forest_icon.png" alt="product" />
           <img class="logo" src="@/assets/coin_forest_logo.png" alt="product" />
-          
         </RouterLink>
         <button
           id="toggler"
@@ -93,56 +92,57 @@
                 <span class="link-text">상품 추천</span>
               </RouterLink>
             </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                >{{
-                  authStore.isLogin
-                    ? `${authStore.info.username}님 안녕하세요`
-                    : "로그인 해주세요"
-                }}</a
-              >
-              <ul class="user dropdown-menu">
-                <li v-if="!authStore.isLogin">
-                  <RouterLink
-                    :to="{ name: 'SignUpView' }"
-                    class="dropdown-item"
-                    v-if="!authStore.isLogin"
-                  >
-                    <span>회원가입</span>
-                  </RouterLink>
-                </li>
-                <li v-if="!authStore.isLogin">
-                  <RouterLink :to="{ name: 'LogInView' }" class="dropdown-item">
-                    <span>로그인</span>
-                  </RouterLink>
-                </li>
-                <li v-if="authStore.isLogin">
-                  <RouterLink
-                    :to="{
-                      name: 'ProfileView',
-                      params: { user_id: authStore.info?.id || 'default' },
-                    }"
-                    class="hi dropdown-item"
-                    v-if="authStore.info"
-                  >
-                    <span class="wavy"
-                      >{{ authStore.info.username }}의 프로필</span
-                    >
-                  </RouterLink>
-                </li>
-                <li v-if="authStore.isLogin">
-                  <a class="dropdown-item" @click="authStore.logOut"
-                    ><span>로그아웃</span></a
-                  >
-                </li>
-              </ul>
-            </li>
           </ul>
+          <p style="margin:0 20px" class="nav-item dropdown">
+            <button
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{
+                authStore.isLogin
+                  ? `${authStore.info.username}님 안녕하세요`
+                  : "로그인 해주세요"
+              }}
+            </button>
+            <ul class="user dropdown-menu">
+              <li v-if="!authStore.isLogin">
+                <RouterLink
+                  :to="{ name: 'SignUpView' }"
+                  class="dropdown-item"
+                  v-if="!authStore.isLogin"
+                >
+                  <span>회원가입</span>
+                </RouterLink>
+              </li>
+              <li v-if="!authStore.isLogin">
+                <RouterLink :to="{ name: 'LogInView' }" class="dropdown-item">
+                  <span>로그인</span>
+                </RouterLink>
+              </li>
+              <li v-if="authStore.isLogin">
+                <RouterLink
+                  :to="{
+                    name: 'ProfileView',
+                    params: { user_id: authStore.info?.id || 'default' },
+                  }"
+                  class="hi dropdown-item"
+                  v-if="authStore.info"
+                >
+                  <span class="wavy"
+                    >{{ authStore.info.username }}의 프로필</span
+                  >
+                </RouterLink>
+              </li>
+              <li v-if="authStore.isLogin">
+                <a class="dropdown-item" @click="authStore.logOut"
+                  ><span>로그아웃</span></a
+                >
+              </li>
+            </ul>
+          </p>
         </div>
       </div>
     </nav>
@@ -468,31 +468,25 @@ span > span {
   margin: 0px 20px;
 }
 
-
-span.link-text {
-  font-size: larger;
+/* span.link-text {
+  font-size: larger;?
   padding: 20px;
   font-weight: bold;
-}
+} */
 
 .navbar-nav {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
 }
-
 /* 메뉴 */
 li.choice {
-  /* font-family: "Nanum Gothic", sans-serif; */
   font-size: 1.1em;
   font-style: normal;
 }
 
-li.dropdown {
+/* li.dropdown {
   margin-left: auto;
   margin-right: 50px;
-}
-
+} */
 
 /* 챗봇 */
 /* styles.css */
@@ -625,5 +619,9 @@ menu {
 }
 .toggler:hover {
   border: 1px solid #4caf50;
+}
+.toggler:focus {
+  border: none;
+  outline: none;
 }
 </style>

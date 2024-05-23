@@ -122,7 +122,11 @@ onMounted(() => {
       savings_income.value = res.data.saving["income"];
       savings_type.value = res.data.saving["invest_type"];
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert("로그인 해주세요.");
+      router.replace({ name: "LogInView" });
+    });
 });
 </script>
 
