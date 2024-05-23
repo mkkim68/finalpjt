@@ -9,11 +9,15 @@
               {{ exchange.cur_nm }}
             </option>
           </select>
+        </div>
+        <div class="input-row">
           <input type="text" v-model="amountInCurrency" placeholder="숫자를 입력하세요" @input="calculateToKRW" />
           <button disabled>{{ selectedCurrency }}</button>
         </div>
+        <div class="arrow">
+          <img class="icon" src="@/assets/exchange_arrow.png" alt="arrow">
+        </div>
         <div class="results">
-          <img class="icon arrow" src="@/assets/exchange_arrow.png" alt="arrow">
           <input type="text" v-model="amountInKRW" placeholder="환전 결과" @input="calculateToCurrency" />
           <button disabled>₩</button>
         </div>
@@ -102,12 +106,13 @@ onMounted(async () => {
 });
 
 
-
 watch([selectedCurrency], () => {
   calculateToKRW();
   calculateToCurrency();
 });
 </script>
+
+
 
 <style scoped>
 .container {
@@ -124,7 +129,14 @@ watch([selectedCurrency], () => {
 
 .input-group {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+}
+
+.request, .input-row, .results, .arrow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 select, input[type="text"], button {
@@ -146,13 +158,14 @@ input[type="text"][readonly] {
 }
 
 .arrow {
-  width: 40px;
-  margin: 0px 20px;
-}
-
-.request, .result {
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+
+.icon {
+  width: 20px;
 }
 
 p {
@@ -161,13 +174,14 @@ p {
 
 .currency-table {
   width: 100%;
-  margin: 50px 0px;
+  margin: 50px 0;
 }
 
 table {
   width: 100%;
   border: 1px solid black;
   border-collapse: collapse;
+  background-color: #fafafa;
 }
 
 thead {
@@ -191,5 +205,39 @@ th.second {
 
 th.third {
   width: 10%;
+}
+
+@media (max-width: 992px) {
+  .input-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .request, .input-row, .results {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .arrow {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    margin-bottom: 15px;
+  }
+
+  .input-row, .results {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  select, input[type="text"], button {
+    width: calc(50% - 5px);
+    margin-right: 5px;
+    margin-bottom: 10px;
+  }
+
+  input[type="text"], button {
+    margin-left: 5px;
+  }
 }
 </style>
