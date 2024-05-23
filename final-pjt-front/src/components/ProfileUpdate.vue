@@ -131,7 +131,7 @@
         </tr>
       </table>
       <div class="buttons">
-        <input type="submit" value="회원가입" />
+        <input type="submit" value="수정하기" />
       </div>
     </form>
   </div>

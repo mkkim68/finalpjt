@@ -145,22 +145,22 @@
 
       <div class="info-section">
         <h3>내게 맞는 금융상품, 비교하기 힘드시죠?</h3>
-        <h2 style="font-weight: bold;">OOOO는 쉽고 정확하게 비교합니다.</h2>
+        <h2 style="font-weight: bold;">코인 포레스트는 "쉽고 정확하게" 비교합니다.</h2>
         <div class="info-cards">
           <div class="info-card">
             <p style="font-weight: bold;">국내 최대 금융상품 데이터</p>
             <img class="advantage ai" src="@/assets/ai.png" alt="ai">
-            <br><p>각종 조건 데이터를 챙겨<br>예적금 상품 조회 및 가입을 도와드립니다.</p>
+            <br><p>다양한 조건 필터링으로 <br>예적금 상품 조회 및 가입을 도와드립니다.</p>
           </div>
           <div class="info-card">
             <p style="font-weight: bold;">나만을 위한 금융매칭</p>
             <img class="advantage bank" src="@/assets/bank.png" alt="bank">
-            <br><p>수백만가지 경우의 수를 계산하는 <strong>추천 알고리즘</strong>이 나를 위한 맞춤 상품을 찾아드립니다.</p>
+            <br><p>수백만가지 경우의 수를 계산하는 <strong>추천 알고리즘</strong>이<br>나를 위한 맞춤 상품을 찾아드립니다.</p>
           </div>
           <div class="info-card">
             <p style="font-weight: bold;">광고X 홍보X</p>
             <img class="advantage no_ad" src="@/assets/no_ad.png" alt="no_ad">
-            <br><p>OOOO의 추천에는 광고도, 홍보도 없습니다. 오직 객관적인 데이터만을 활용합니다.</p>
+            <br><p>코인 포레스트의 추천에는 광고도, 홍보도 없습니다.<br>오직 객관적인 데이터만을 활용합니다.</p>
           </div>
         </div>
       </div>
@@ -226,6 +226,11 @@ onMounted(() => {});
   font-size: 0.9em;
   color: #333;
   line-height: 1.5em;
+}
+
+img.advantage {
+  width: 30%;
+  height: 30%;
 }
 
 

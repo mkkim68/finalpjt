@@ -23,7 +23,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
+            <li class="nav-item choice">
               <RouterLink
                 class="nav-link"
                 :to="{ name: 'DepositList' }"
@@ -39,7 +39,7 @@
                 <span class="link-text">예적금</span>
               </RouterLink>
             </li>
-            <li class="nav-item">
+            <li class="nav-item choice">
               <RouterLink
                 class="nav-link"
                 :to="{ name: 'ExchangeView' }"
@@ -55,7 +55,7 @@
                 <span class="link-text">환율</span>
               </RouterLink>
             </li>
-            <li class="nav-item">
+            <li class="nav-item choice">
               <RouterLink
                 class="nav-link"
                 :to="{ name: 'MapView' }"
@@ -65,7 +65,7 @@
                 <span class="link-text">지도</span>
               </RouterLink>
             </li>
-            <li class="nav-item">
+            <li class="nav-item choice">
               <RouterLink
                 class="nav-link"
                 :to="{ name: 'community' }"
@@ -79,7 +79,7 @@
                 <span class="link-text">게시판</span>
               </RouterLink>
             </li>
-            <li class="nav-item">
+            <li class="nav-item choice">
               <RouterLink
                 class="nav-link"
                 :to="{ name: 'ChartView' }"
@@ -479,6 +479,13 @@ span.link-text {
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+/* 메뉴 */
+li.choice {
+  /* font-family: "Nanum Gothic", sans-serif; */
+  font-size: 1.1em;
+  font-style: normal;
 }
 
 li.dropdown {

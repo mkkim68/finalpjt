@@ -34,7 +34,7 @@
         <tbody>
           <tr v-for="(bank, index) in filteredBanks" :key="bank.id">
             <td style="text-align: center;">{{ index + 1 }}</td>
-            <td style="font-weight: ;">{{ bank.place_name }}</td>
+            <td style="font-weight: bold;">{{ bank.place_name }}</td>
             <td>{{ bank.road_address_name || bank.address_name }}</td>
           </tr>
         </tbody>
@@ -154,7 +154,7 @@ watch(selectedOption, () => {
 <style scoped>
 .container {
   width: 90%;
-  margin: 20px auto;
+  margin: 50px auto;
   display: flex;
   flex-direction: column;
 }
@@ -227,6 +227,7 @@ table {
   width: 100%;
   border: 1px solid black;
   border-collapse: collapse;
+  background-color: #fafafa;
 }
 
 thead {

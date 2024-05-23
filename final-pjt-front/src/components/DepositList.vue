@@ -225,4 +225,8 @@ div.buttons > input {
   width: 80px;
   margin-top: 20px;
 }
+
+div.buttons > input:hover {
+  background-color: #2e8531;
+}
 </style>
