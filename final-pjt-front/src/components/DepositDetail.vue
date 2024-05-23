@@ -9,8 +9,10 @@
         가입 완료
       </button>
     </h1>
-    <p>{{ deposit.kor_co_nm }}</p>
     <div id="product-info">
+      <p>
+        <span style="font-weight: 600">가입 은행 |</span>
+        {{ deposit.kor_co_nm }}</p>
       <p>
         <span style="font-weight: 600">가입 대상 |</span>
         {{ deposit.join_member }}
@@ -32,7 +34,7 @@
         {{ deposit.etc_note }}
       </p>
     </div>
-    <div>
+    <div class="table">
       <table>
         <thead style="text-align: center">
           <tr>
@@ -146,6 +148,21 @@ const join = function () {
 </script>
 
 <style scoped>
+.container {
+  width: 90%;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#product-info {
+  margin-top: 50px;
+}
+
+div.table {
+  margin-top: 30px;
+}
+
 button {
   margin-left: 10px;
 }

@@ -6,7 +6,9 @@
         style="padding: 10px 10px; background-color: rgb(255, 255, 255)"
       >
         <RouterLink to="/" class="navbar-brand">
-          <img class="icon logo" src="@/assets/logo.png" alt="product" />
+          <img class="icon" src="@/assets/coin_forest_icon.png" alt="product" />
+          <img class="logo" src="@/assets/coin_forest_logo.png" alt="product" />
+          
         </RouterLink>
         <button
           id="toggler"
@@ -293,7 +295,7 @@ onMounted(() => {
 .toggler:focus {
   outline: none !important;
 }
-img.logo {
+img.icon {
   width: 80px;
 }
 @keyframes coinEffect {
@@ -319,13 +321,17 @@ img.logo {
     transform: rotateY(100deg);
   }
 }
-img.logo:hover {
+img.icon:hover {
   animation: coinEffect 1.5s ease-in-out infinite forwards;
 }
 
 img.icon {
-  width: 70px;
+  width: 80px;
   margin-right: 0px;
+}
+
+img.logo {
+  width: 120px;
 }
 
 img.product {
@@ -459,8 +465,27 @@ span.user {
 }
 
 span > span {
-  margin: 0px 10px;
+  margin: 0px 20px;
 }
+
+
+span.link-text {
+  font-size: larger;
+  padding: 20px;
+  font-weight: bold;
+}
+
+.navbar-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+li.dropdown {
+  margin-left: auto;
+  margin-right: 50px;
+}
+
 
 /* 챗봇 */
 /* styles.css */

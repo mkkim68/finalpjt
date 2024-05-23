@@ -9,15 +9,32 @@
         가입 완료
       </button>
     </h1>
-    <p>{{ saving.kor_co_nm }}</p>
-    <div>
-      <p>가입 대상: {{ saving.join_member }}</p>
-      <p>가입 방법: {{ saving.join_way }}</p>
-      <p>가입 제한: {{ join_deny }}</p>
-      <p>만기 후 이자율: {{ saving.mtrt_int }}</p>
-      <p>기타 유의사항: {{ saving.etc_note }}</p>
+    <div id="product-info">
+      <p>
+        <span style="font-weight: 600">가입 은행 |</span>
+        {{ saving.kor_co_nm }}</p>
+      <p>
+        <span style="font-weight: 600">가입 대상 |</span>
+        {{ saving.join_member }}
+      </p>
+      <p>
+        <span style="font-weight: 600">가입 방법 |</span>
+        {{ saving.join_way }}
+      </p>
+      <p>
+        <span style="font-weight: 600">가입 제한 |</span>
+        {{ join_deny }}
+      </p>
+      <p>
+        <span style="font-weight: 600">만기 후 이자율 |</span>
+        {{ saving.mtrt_int }}
+      </p>
+      <p>
+        <span style="font-weight: 600">기타 유의사항 |</span>
+        {{ saving.etc_note }}
+      </p>
     </div>
-    <div>
+    <div class="table">
       <table>
         <thead style="text-align: center">
           <tr>
@@ -130,6 +147,21 @@ const join = function () {
 </script>
 
 <style scoped>
+.container {
+  width: 90%;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#product-info {
+  margin-top: 50px;
+}
+
+div.table {
+  margin-top: 30px;
+}
+
 button {
   margin-left: 10px;
 }

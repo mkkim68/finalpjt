@@ -1,42 +1,67 @@
 <template>
   <div v-if="info" class="container">
     <h1>{{ info.username }}'s Profile</h1>
-    <RouterLink
-      v-if="Number(authStore.info.id) === Number(user_id)"
-      :to="{ name: 'ProfileUpdate' }"
-      >개인정보 수정</RouterLink
-    >
-    <div>
-      <p>email: {{ info.email ? info.email : "미기입" }}</p>
-      <p>age: {{ info.age ? info.age : "미기입" }}</p>
-      <p>잔고: {{ info.balance ? info.balance + "원" : "미기입" }}</p>
-      <p>연봉: {{ info.income ? info.income + "원" : "미기입" }}</p>
-      <p>
-        주거래은행: {{ info.favorite_bank ? info.favorite_bank : "미기입" }}
-      </p>
-      <p>
-        저축 유형: {{ info.invest_type ? info.invest_type + "형" : "미기입" }}
-      </p>
+    <div class="info">
+      <button class="revise">
+        <RouterLink
+          v-if="Number(authStore.info.id) === Number(user_id)"
+          :to="{ name: 'ProfileUpdate' }"
+          >개인정보 수정</RouterLink>
+        </button>
+      <table class="info_table">
+        <tr>
+          <th>이메일</th>
+          <td>{{ info.email ? info.email : "미기입" }}</td>
+        </tr>
+        <tr>
+          <th>나이</th>
+          <td>{{ info.age ? info.age : "미기입" }}</td>
+        </tr>
+        <tr>
+          <th>잔고</th>
+          <td>{{ info.balance ? info.balance + "원" : "미기입" }}</td>
+        </tr>
+        <tr>
+          <th>연봉</th>
+          <td>{{ info.income ? info.income + "원" : "미기입" }}</td>
+        </tr>
+        <tr>
+          <th>주거래 은행</th>
+          <td>{{ info.favorite_bank ? info.favorite_bank : "미기입" }}</td>
+        </tr>
+        <tr>
+          <th>저축 유형</th>
+          <td>{{ info.invest_type ? info.invest_type + "형" : "미기입" }}</td>
+        </tr>
+      </table>
     </div>
-    <div>
-      <h4>가입 중인 예금 상품</h4>
-      <ul>
-        <li v-for="deposit in deposits" :key="deposit.id">
-          {{ deposit.fin_prdt_nm }}
-        </li>
-      </ul>
-    </div>
-    <div>
-      <h4>가입 중인 적금 상품</h4>
-      <ul>
-        <li v-for="saving in savings" :key="saving.id">
-          {{ saving.fin_prdt_nm }}
-        </li>
-      </ul>
-    </div>
-    <div>
-      <h4>가입한 상품 금리</h4>
-      <canvas id="interestChart"></canvas>
+
+    <div class="flex-container">
+      <div class="products">
+        <h5>가입한 상품들</h5>
+        <div class="product-lists">
+          <div>
+            <h6>예금</h6>
+            <ul>
+              <li v-for="deposit in deposits" :key="deposit.id">
+                {{ deposit.fin_prdt_nm }}
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h6>적금</h6>
+            <ul>
+              <li v-for="saving in savings" :key="saving.id">
+                {{ saving.fin_prdt_nm }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="rate">
+        <h6>금리</h6>
+        <canvas id="interestChart"></canvas>
+      </div>
     </div>
   </div>
   <div v-else>
@@ -251,4 +276,116 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+  width: 90%;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+button.revise {
+  width: 150px;
+  background-color: #4caf50;
+  cursor: pointer;
+  margin-top: 10px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button.revise > a {
+  text-decoration: none;
+  color: white;
+}
+
+button.revise:hover {
+  text-decoration: none;
+  background-color: #2e8531;
+}
+
+
+.container > div {
+  margin: 50px 0px;
+}
+
+.info_table {
+  margin-top: 10px;
+}
+
+.info_table > tr > th {
+  min-width: 150px;
+  padding: 5px 15px;
+}
+
+.info_table > tr > td {
+  width: 250px;
+  padding: 5px 15px;
+}
+
+th, td {
+  padding: 10px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 50px;
+}
+
+.products {
+  flex: 1;
+  min-width: 220px;
+}
+
+.product-lists {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-lists > div {
+  margin: 10px 0px;
+}
+
+.products h5,
+.products h6 {
+  margin-bottom: 10px;
+  font-weight: bolder;
+}
+
+.products ul {
+  list-style: none;
+  padding: 0;
+}
+
+.products ul li {
+  padding: 5px 0;
+}
+
+.rate {
+  flex: 2;
+  margin-left: 30px;
+  margin-top: 40px;
+}
+
+.rate canvas {
+  width: 100%;
+  height: auto;
+}
+
+.rate h6 {
+  font-weight: bolder;
+}
+
+@media (max-width: 768px) {
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .rate {
+    margin-left: 0;
+    margin-top: 30px;
+  }
+}
+</style>

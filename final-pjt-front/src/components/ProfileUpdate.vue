@@ -25,15 +25,60 @@
         </tr>
         <tr>
           <th>
+            <span class="important">* </span>
+            <label for="password1">비밀번호</label>
+          </th>
+          <td>
+            <input
+              type="password"
+              id="password1"
+              v-model.trim="password1"
+            /><br />
+            <span style="font-size: 0.7em"
+              >※ 대문자, 숫자, "~!@#()_|. 특수기호를 포함한 3~5자</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <span class="important">* </span>
+            <label for="password2">비밀번호 확인</label>
+          </th>
+          <td>
+            <input type="password" id="password2" v-model.trim="password2" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
             <label for="age">나이</label>
           </th>
           <td>
             <input type="number" id="age" v-model="age" />
           </td>
         </tr>
+
         <tr>
           <th>
-            <label for="balance">잔액(만원 단위)</label>
+            <label for="last-name">성</label>
+          </th>
+          <td>
+            <input type="text" id="last-name" v-model="last_name" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <label for="first-name">이름</label>
+          </th>
+          <td>
+            <input type="text" id="first-name" v-model="first_name" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>
+            <label for="balance">잔액(원)</label>
           </th>
           <td>
             <input type="number" id="balance" v-model="balance" />
@@ -41,7 +86,7 @@
         </tr>
         <tr>
           <th>
-            <label for="income">연봉(만원 단위)</label>
+            <label for="income">연봉(원)</label>
           </th>
           <td>
             <input type="number" id="income" v-model="income" />
@@ -86,7 +131,7 @@
         </tr>
       </table>
       <div class="buttons">
-        <input type="submit" value="회원정보 수정" />
+        <input type="submit" value="회원가입" />
       </div>
     </form>
   </div>
@@ -146,4 +191,78 @@ const userUpdate = function () {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.container {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  margin: 20px auto;
+}
+
+
+#memberForm {
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  margin-bottom: 50px;
+  padding: 30px 60px;
+  width: 955px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+}
+
+div.guide {
+  font-size: 0.8em;
+}
+span.important {
+  color: #0a58ca;
+}
+
+table {
+  margin-top: 20px;
+  background-color: rgb(210, 210, 210);
+  margin: 20px;
+  border-radius: 10px;
+}
+th {
+  padding: 12px 50px;
+}
+td {
+  width: 450px;
+  padding: 12px 50px;
+}
+
+td > * {
+  width: 180px;
+  height: 25px;
+  padding: 0px 5px;
+  margin: 0px;
+  border: 0px;
+}
+
+td > select {
+  padding: 0px;
+  margin: 0px;
+}
+
+div.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+div.buttons > input {
+  padding: 10px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 150px;
+  margin-top: 20px;
+}
+</style>
+
