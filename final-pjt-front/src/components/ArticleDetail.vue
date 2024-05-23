@@ -89,13 +89,29 @@
       </div>
       <div ref="comments" class="comment-list">
         <div v-if="comment_count">
-          <p v-for="comment in article.comment_set" :key="comment.id">
+          <p v-for="comment in comment_set" :key="comment.id">
             <span class="comment-user"><RouterLink
-          :to="{ name: 'ProfileView', params: { user_id: comment.user.id } }"
-          >@{{ comment.user.username }}</RouterLink
-        >
-        {{ comment.created_at.slice(0,10) }} {{ comment.created_at.slice(11,19) }}</span>
-            <p class="comment-content">
+                :to="{ name: 'ProfileView', params: { user_id: comment.user.id } }"
+                >@{{ comment.user.username }}</RouterLink
+              >
+              {{ comment.created_at.slice(0,10) }} {{ comment.created_at.slice(11,19) }}
+              <div class="dropdown" style="display: inline;">
+                <button style="border: none; background-color: white;" v-if="authStore.info.id === comment.user.id" class="btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <ul class="dropdown-menu">
+                  <li><a role="button" class="dropdown-item" href="#" @click="deleteComment(comment.id)">댓글 삭제</a></li>
+                  <li><a class="dropdown-item" href="#" data-bs-toggle="collapse" :data-bs-target="`#collapseExample${comment.id}`" aria-expanded="false" aria-controls="collapseExample">댓글 수정</a></li>
+                </ul>
+              </div>
+              <div :ref="`collapseExample${comment.id}`" class="collapse" :id="`collapseExample${comment.id}`">
+                <div class="card card-body">
+                  <div class="input-group">
+                  <input style="margin: 0;" aria-label="Recipient's username with two button addons" type="text" class="form-control" v-model.trim="update_comment">
+                  <button style="margin: 0;"  class="btn btn-outline-secondary" @click="closeCollapse(comment.id)">취소</button>
+                  <button style="margin: 0;" class="btn btn-success" @click="updateComment(comment.id)">수정</button></div>
+                </div>
+              </div>
+            </span>
+            <p class="comment-content" :id="`comment${comment.id}`">
             {{ comment.content }}</p>
           </p>
         </div>
@@ -105,12 +121,16 @@
   </div>
 </template>
 
+
+
 <script setup>
 import { useRoute, RouterLink, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import { useArticleStore } from "@/stores/article";
 import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
+import Collapse from 'bootstrap/js/dist/collapse';
+
 const route = useRoute();
 const articleStore = useArticleStore();
 const authStore = useAuthStore();
@@ -120,6 +140,7 @@ const id = ref(route.params.article_id);
 const article = ref(null);
 const content = ref(null);
 const isLiked = ref(null);
+const comment_set = ref(null);
 const comment_count = ref(null);
 const like_users = ref(null);
 const created_at_year = ref(null);
@@ -128,9 +149,43 @@ const created_at_date = ref(null);
 const created_at_hour = ref(null);
 const created_at_min = ref(null);
 const created_at_sec = ref(null);
+const update_comment = ref(null);
 
 const comments = ref(null);
 const like_hover = ref(null);
+const closeCollapse = function (commentId) {
+      const collapseElement = document.getElementById(`collapseExample${commentId}`);
+      if (collapseElement) {
+        const collapseInstance = Collapse.getInstance(collapseElement);
+        if (collapseInstance) {
+          collapseInstance.hide();
+        }
+      }
+    }
+
+const updateComment = function (comment_id) {
+  const now = document.getElementById(`comment${comment_id}`)
+  const payload = {
+    article_id : id.value,
+    comment_id : comment_id,
+    token: authStore.token,
+    content: update_comment.value
+  }
+  articleStore.updateComment(payload)
+  now.innerText = update_comment.value
+  closeCollapse(comment_id);
+}
+
+const deleteComment = function (comment_id) {
+  const payload = {
+    article_id : id.value,
+    comment_id : comment_id,
+    token: authStore.token
+  }
+  articleStore.deleteComment(payload)
+  const index = comment_set.value.findIndex((item) => item.id === comment_id)
+  comment_set.value.splice(index, 1)
+}
 
 const handleMouseOver = function () {
   like_hover.value = true;
@@ -178,6 +233,7 @@ onMounted(() => {
   })
     .then((res) => {
       article.value = res.data;
+      comment_set.value = res.data.comment_set;
       comment_count.value = res.data.comment_count;
       created_at_year.value = res.data.created_at.slice(0, 4);
       created_at_month.value = res.data.created_at.slice(5, 7);

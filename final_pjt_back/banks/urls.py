@@ -11,8 +11,6 @@ urlpatterns = [
     path('deposits/<str:fin_prdt_cd>/', views.deposit_detail),
     path('deposits/<str:fin_prdt_cd>/option/', views.deposit_detail_option),
     path('deposits/<str:fin_prdt_cd>/join/', views.deposit_detail_join),
-    # #예금 상품추천
-    path('deposits/recommend/<int:user_id>/', views.deposit_recommend),
     #적금
     path('savings/', views.saving_list),
     path('saving-options/', views.saving_option_list),
@@ -20,8 +18,8 @@ urlpatterns = [
     path('savings/<str:fin_prdt_cd>/', views.saving_detail),
     path('savings/<str:fin_prdt_cd>/option/', views.saving_detail_option),
     path('savings/<str:fin_prdt_cd>/join/', views.saving_detail_join),
-    #적금 상품추천
-    path('savings/recommend/<int:user_id>/', views.saving_recommend),
+    #상품추천
+    path('recommend/<int:user_id>/', views.recommend),
     #환율
     path('exchange/', views.exchange),
     path('local/exchange/', views.get_local_exchange, name='get_local_exchange'),

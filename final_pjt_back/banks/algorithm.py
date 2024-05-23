@@ -19,6 +19,7 @@ db_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
 # 데이터베이스 연결 설정
 con = sqlite3.connect(db_path)
 
+# 예금
 # 비슷한 나이(+5살)의 사람들이 가장 많이 가입한 3개
 def deposit_recommend_age(target_age):
     Query_String = f"""
@@ -110,12 +111,98 @@ def deposit_recommend_type(target):
     result_list = result_df.to_dict(orient='records')
     return result_list
 
-# Example usage
-print(deposit_recommend_age(30))
-print(deposit_recommend_bank('0010016'))
-print(deposit_recommend_balance(100000))
-print(deposit_recommend_income(50000000))
-print(deposit_recommend_type('성실'))
+# 적금
+# 비슷한 나이(+5살)의 사람들이 가장 많이 가입한 3개
+def saving_recommend_age(target_age):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.age BETWEEN {target_age - 5} AND {target_age + 5}
+    """
+    df = pd.read_sql_query(Query_String, con)
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+
+    if not top_savings:
+        return []
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    result_df = pd.read_sql_query(Query_String, con)
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 같은 은행에 있는 상품들 전체
+def saving_recommend_bank(target):
+    Query_String = f"SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving WHERE fin_co_no = '{target}';"
+    df = pd.read_sql_query(Query_String, con)
+    result_list = df.to_dict(orient='records')
+    return result_list
+
+# 비슷한 자산 규모의 사람들이 가장 많이 가입한 3개
+def saving_recommend_balance(target):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.balance BETWEEN {target - 500000} AND {target + 500000}
+    """
+    df = pd.read_sql_query(Query_String, con)
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+
+    if not top_savings:
+        return []
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    result_df = pd.read_sql_query(Query_String, con)
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 비슷한 연봉의 사람들이 가장 많이 가입한 3개
+def saving_recommend_income(target):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.income BETWEEN {target - 5000000} AND {target + 5000000}
+    """
+    df = pd.read_sql_query(Query_String, con)
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+
+    if not top_savings:
+        return []
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    result_df = pd.read_sql_query(Query_String, con)
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 같은 타입인 사람들이 가장 많이 가입한 3개
+def saving_recommend_type(target):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.invest_type='{target}'
+    """
+    df = pd.read_sql_query(Query_String, con)
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+
+    if not top_savings:
+        return []
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    result_df = pd.read_sql_query(Query_String, con)
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
 
 # 데이터베이스 연결 닫기
 con.close()

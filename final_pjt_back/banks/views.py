@@ -1,6 +1,306 @@
+import os
+import sys
 import pandas as pd
-import numpy as np
-import sqlite3
+from django.db import connection
+import django
+from django.conf import settings
+
+# 프로젝트 루트 디렉토리를 PYTHONPATH에 추가
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
+# Django settings 초기화
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'final_pjt_back.settings')
+django.setup()
+
+# 예금
+# 비슷한 나이(+5살)의 사람들이 가장 많이 가입한 3개
+def deposit_recommend_age(target_age):
+    Query_String = f"""
+    SELECT b.deposit_id FROM accounts_user a 
+    INNER JOIN accounts_user_deposit b ON a.id = b.user_id 
+    WHERE a.age BETWEEN {target_age - 5} AND {target_age + 5}
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_deposits = df['deposit_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_deposits:
+        return []
+
+    deposits_str = ','.join(map(str, top_deposits))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_deposit 
+    WHERE id IN ({deposits_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 같은 은행에 있는 상품들 전체
+def deposit_recommend_bank(target):
+    Query_String = f"SELECT fin_prdt_cd, fin_prdt_nm FROM banks_deposit WHERE fin_co_no = '{target}';"
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    result_list = df.to_dict(orient='records')
+    return result_list
+
+# 비슷한 자산 규모의 사람들이 가장 많이 가입한 3개
+def deposit_recommend_balance(target):
+    Query_String = f"""
+    SELECT b.deposit_id FROM accounts_user a 
+    INNER JOIN accounts_user_deposit b ON a.id = b.user_id 
+    WHERE a.balance BETWEEN {target - 500000} AND {target + 500000}
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_deposits = df['deposit_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_deposits:
+        return []
+
+    deposits_str = ','.join(map(str, top_deposits))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_deposit 
+    WHERE id IN ({deposits_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 비슷한 연봉의 사람들이 가장 많이 가입한 3개
+def deposit_recommend_income(target):
+    Query_String = f"""
+    SELECT b.deposit_id FROM accounts_user a 
+    INNER JOIN accounts_user_deposit b ON a.id = b.user_id 
+    WHERE a.income BETWEEN {target - 5000000} AND {target + 5000000}
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_deposits = df['deposit_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_deposits:
+        return []
+
+    deposits_str = ','.join(map(str, top_deposits))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_deposit 
+    WHERE id IN ({deposits_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 같은 타입인 사람들이 가장 많이 가입한 3개
+def deposit_recommend_type(target):
+    Query_String = f"""
+    SELECT b.deposit_id FROM accounts_user a 
+    INNER JOIN accounts_user_deposit b ON a.id = b.user_id 
+    WHERE a.invest_type='{target}'
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_deposits = df['deposit_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_deposits:
+        return []
+
+    deposits_str = ','.join(map(str, top_deposits))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_deposit 
+    WHERE id IN ({deposits_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 적금
+# 비슷한 나이(+5살)의 사람들이 가장 많이 가입한 3개
+def saving_recommend_age(target_age):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.age BETWEEN {target_age - 5} AND {target_age + 5}
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_savings:
+        return []
+
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 같은 은행에 있는 상품들 전체
+def saving_recommend_bank(target):
+    Query_String = f"SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving WHERE fin_co_no = '{target}';"
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    result_list = df.to_dict(orient='records')
+    return result_list
+
+# 비슷한 자산 규모의 사람들이 가장 많이 가입한 3개
+def saving_recommend_balance(target):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.balance BETWEEN {target - 500000} AND {target + 500000}
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_savings:
+        return []
+
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 비슷한 연봉의 사람들이 가장 많이 가입한 3개
+def saving_recommend_income(target):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.income BETWEEN {target - 5000000} AND {target + 5000000}
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_savings:
+        return []
+
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# 같은 타입인 사람들이 가장 많이 가입한 3개
+def saving_recommend_type(target):
+    Query_String = f"""
+    SELECT b.saving_id FROM accounts_user a 
+    INNER JOIN accounts_user_saving b ON a.id = b.user_id 
+    WHERE a.invest_type='{target}'
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+
+    top_savings = df['saving_id'].value_counts().nlargest(3).index.values.tolist()
+    if not top_savings:
+        return []
+
+    savings_str = ','.join(map(str, top_savings))
+    Query_String = f"""
+    SELECT fin_prdt_cd, fin_prdt_nm FROM banks_saving 
+    WHERE id IN ({savings_str})
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(Query_String)
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        result_df = pd.DataFrame(rows, columns=columns)
+
+    result_list = result_df.to_dict(orient='records')
+    return result_list
+
+# Example usage
+# print(deposit_recommend_age(30))
+# print(deposit_recommend_bank('0010016'))
+# print(deposit_recommend_balance(100000))
+# print(deposit_recommend_income(50000000))
+# print(deposit_recommend_type('성실'))
+
+# print(saving_recommend_age(30))
+# print(saving_recommend_bank('0010016'))
+# print(saving_recommend_balance(100000))
+# print(saving_recommend_income(50000000))
+# print(saving_recommend_type('성실'))
+
+
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -10,7 +310,6 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404, get_list_or_404
-from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 
@@ -198,23 +497,30 @@ def saving_detail_join(request, fin_prdt_cd):
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
-def deposit_recommend(request, user_id):
+def recommend(request, user_id):
     user = User.objects.get(pk=user_id)
     if request.method == 'GET':
         user_serializer = CustomUserSerializer(user)
-        age, favorite_bank, balance, income = user_serializer.data.age, user_serializer.data.favorite_bank, user_serializer.data.balance, user_serializer.data.income
-        context = {
-            'age': [],
-            'favorite_bank': [],
-            'balance': [],
-            'income': []
-        }
-    return Response(context)
+        age, favorite_bank, balance, income, type = user_serializer.data['age'], user_serializer.data['favorite_bank'], user_serializer.data['balance'], user_serializer.data['income'], user_serializer.data['invest_type']
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def saving_recommend(request, user_id):
-    return
+        context = {
+            'deposit': {
+                'age': deposit_recommend_age(age) if age != None else None,
+                'favorite_bank': deposit_recommend_bank(favorite_bank) if favorite_bank != None else None,
+                'balance': deposit_recommend_balance(balance) if balance != None else None,
+                'income': deposit_recommend_income(income) if income != None else None,
+                'invest_type': deposit_recommend_type(type) if type != None else None
+            },
+            'saving' :{
+                'age': saving_recommend_age(age) if age != None else None,
+                'favorite_bank': saving_recommend_bank(favorite_bank) if favorite_bank != None else None,
+                'balance': saving_recommend_balance(balance) if balance != None else None,
+                'income': saving_recommend_income(income) if income != None else None,
+                'invest_type': saving_recommend_type(type) if type != None else None
+                },
+            }
+        
+    return Response(context)
 
 def get_previous_business_day(date):
     while True:

@@ -113,6 +113,37 @@ export const useArticleStore = defineStore("article", () => {
       })
       .catch((err) => console.log(err));
   };
+  const deleteComment = function (payload) {
+    const { article_id, comment_id, token } = payload;
+    axios({
+      method: "delete",
+      url: `${API_URL}/api/articles/${article_id}/comments/${comment_id}/`,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((res) => {
+        // console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+  const updateComment = function (payload) {
+    const { article_id, comment_id, token, content } = payload;
+    axios({
+      method: "put",
+      url: `${API_URL}/api/articles/${article_id}/comments/${comment_id}/`,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      data: {
+        content: content,
+      },
+    })
+      .then((res) => {
+        // console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
   return {
     API_URL,
     articles,
@@ -122,5 +153,7 @@ export const useArticleStore = defineStore("article", () => {
     deleteArticle,
     updateLike,
     createComment,
+    deleteComment,
+    updateComment,
   };
 });
