@@ -5,9 +5,9 @@
         <li class="menu_item" role="presentation">
           <RouterLink
             to="/product/deposit"
-            active-class="active"
+            active-class="on"
             id="dashboard"
-            class="menu_id on"
+            class="menu_id"
             role="tab"
             aria-selected="true"
           >
@@ -17,7 +17,7 @@
         <li class="menu_item" role="presentation">
           <RouterLink
             to="/product/savings"
-            active-class="active"
+            active-class="on"
             id="shop"
             class="menu_id"
             role="tab"
@@ -75,7 +75,7 @@ a {
 div.btnGroup {
   display: flex;
   width: 100%;
-  height: 55px;
+  height: 65px;
   border-radius: 30px 30px 0 0;
   padding: 0px;
 }
@@ -122,6 +122,7 @@ div.btnGroup > ul > li > a.on {
   background-color: #f2f2f2;
   font-weight: bolder;
   text-decoration: none;
+  font-size: 1.2em;
 }
 
 div.btnGroup > ul > li > a:hover > span,
@@ -129,5 +130,6 @@ div.btnGroup > ul > li > a:focus > span {
   display: inline-block;
   text-align: center;
   font-weight: bolder;
+  font-size: 1.2em;
 }
 </style>

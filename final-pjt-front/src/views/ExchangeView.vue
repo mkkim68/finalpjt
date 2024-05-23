@@ -117,7 +117,7 @@ watch([selectedCurrency], () => {
 <style scoped>
 .container {
   width: 90%;
-  margin: 20px auto;
+  margin: 50px auto;
 }
 
 .currency-converter {
@@ -175,6 +175,7 @@ p {
 .currency-table {
   width: 100%;
   margin: 50px 0;
+  padding-bottom: 50px;
 }
 
 table {
